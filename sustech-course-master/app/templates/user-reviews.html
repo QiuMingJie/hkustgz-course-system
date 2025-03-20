@@ -1,0 +1,55 @@
+{% extends "layout.html" %}
+{% block content %}
+
+<div class="container">
+  <div class="row float-element shadow">
+
+      <div class="bm-pd-lg">
+        <div class="inline-h3">
+          <span class="blue h3"><a href="{{ url_for('user.view_profile', user_id=user.id) }}">{{ user.username }}</a> 点评</span>
+          （{{ user.reviews_count }}门）
+        </div>
+
+        {% for review in user.reviews %}
+          {% if review.course %}
+        <div class="ud-pd-md dashed">
+          <div class="ud-pd-sm">
+            {% set course = review.course %}
+            <a href="{{ url_for('course.view_course', course_id=course.id) }}">{{ course.name }}（{{ course.teacher.name or _('未知') }}）</a>
+            <span class="small grey align-bottom left-pd-sm">学期：{{ review.term|term_display }}</span>
+	        {% if current_user == user and review.is_anonymous %}
+	        <span class="badge rounded-pill bg-success">匿名</span>
+	        {% endif %}
+	        {% if current_user == user and review.only_visible_to_student %}
+	        <span class="badge rounded-pill bg-success">仅登录学生可见</span>
+	        {% endif %}
+            <span class="text-body-secondary small float-right desktop localtime" style="display: none;">{{ review.update_time|utctime }}</span>
+          </div>
+          {% include 'review-hidden.html' %}
+          <p class="dark-grey">{{ review.content|abstract }}
+            <a href="{{ url_for('course.view_course', course_id=course.id) }}#review-{{ review.id }}"> >>{{ _('more') }}</a>
+          </p>
+          <div class="pull-right">
+              {% if current_user.is_authenticated %}
+              <a class="nounderline" href="javascript: {{ 'cancel_' if review.is_upvoted() }}upvote_review({{ review.id }})">
+              {% else %}
+              <a class="nounderline" data-bs-toggle="modal" data-bs-target="#signin" href="#">
+              {% endif %}
+                <span class="fa-regular fa-thumbs-up {{ 'blue' if review.is_upvoted() else 'grey' }} left-pd-lg" aria-hidden="true" ></span>
+                <span id="review-upvote-count-{{review.id}}">{{ review.upvote_count }}</span>
+              </a>
+
+              <span class="fa fa-comment {{ 'blue' if review.comments else 'grey' }} left-pd-md" aria-hidden="true"></span>
+              <span id="review-comment-count-{{review.id}}">{{ review.comment_count }}</span>
+          </div>
+        </div>
+          {% endif %}
+        {% endfor %}
+      </div><!-- end bm-pd-lg -->
+  </div><!-- end float-element -->
+</div><!-- end container -->
+{% endblock %}
+
+{% block script %}
+{% include 'scripts/review-ajax.html' %}
+{% endblock %}

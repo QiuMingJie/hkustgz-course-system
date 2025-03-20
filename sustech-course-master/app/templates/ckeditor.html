@@ -1,0 +1,373 @@
+{#<script src="/static/ckeditor5c/ckeditor.js"></script>#}
+<!-- <script src="https://mirrors.sustech.edu.cn/unpkg/ckeditor5/build/ckeditor5-dll.js"></script>
+<script src="https://mirrors.sustech.edu.cn/unpkg/@ckeditor/ckeditor5-editor-classic/build/editor-classic.js"></script>
+<script src="https://mirrors.sustech.edu.cn/unpkg/@ckeditor/ckeditor5-essentials/build/essentials.js"></script>
+<script src="https://mirrors.sustech.edu.cn/unpkg/@ckeditor/ckeditor5-adapter-ckfinder/build/adapter-ckfinder.js"></script>
+<script src="https://mirrors.sustech.edu.cn/unpkg/@ckeditor/ckeditor5-autoformat/build/autoformat.js"></script>
+<script src="https://mirrors.sustech.edu.cn/unpkg/@ckeditor/ckeditor5-basic-styles/build/basic-styles.js"></script>
+<script src="https://mirrors.sustech.edu.cn/unpkg/@ckeditor/ckeditor5-block-quote/build/block-quote.js"></script>
+<script src="https://mirrors.sustech.edu.cn/unpkg/@ckeditor/ckeditor5-ckfinder/build/ckfinder.js"></script>
+<script src="https://mirrors.sustech.edu.cn/unpkg/@ckeditor/ckeditor5-easy-image/build/easy-image.js"></script>
+<script src="https://mirrors.sustech.edu.cn/unpkg/@ckeditor/ckeditor5-heading/build/heading.js"></script>
+<script src="https://mirrors.sustech.edu.cn/unpkg/@ckeditor/ckeditor5-image/build/image.js"></script>
+<script src="https://mirrors.sustech.edu.cn/unpkg/@ckeditor/ckeditor5-indent/build/indent.js"></script>
+<script src="https://mirrors.sustech.edu.cn/unpkg/@ckeditor/ckeditor5-link/build/link.js"></script>
+<script src="https://mirrors.sustech.edu.cn/unpkg/@ckeditor/ckeditor5-list/build/list.js"></script>
+<script src="https://mirrors.sustech.edu.cn/unpkg/@ckeditor/ckeditor5-media-embed/build/media-embed.js"></script>
+<script src="https://mirrors.sustech.edu.cn/unpkg/@ckeditor/ckeditor5-paste-from-office/build/paste-from-office.js"></script>
+<script src="https://mirrors.sustech.edu.cn/unpkg/@ckeditor/ckeditor5-table/build/table.js"></script>
+<script src="https://mirrors.sustech.edu.cn/unpkg/@ckeditor/ckeditor5-cloud-services/build/cloud-services.js"></script>
+<script src="https://mirrors.sustech.edu.cn/unpkg/@ckeditor/ckeditor5-html-embed@40.2.0/build/html-embed.js"></script>
+ -->
+<style>
+    /* dark mode override */
+    @media (prefers-color-scheme: dark) {
+        :root {
+
+            /* Helper variables to avoid duplication in the colors. */
+            --ck-custom-background: hsl(270, 1%, 29%);
+            --ck-custom-foreground: hsl(255, 3%, 18%);
+            --ck-custom-border: hsl(300, 1%, 22%);
+            --ck-custom-white: hsl(0, 0%, 100%);
+
+            /* -- Overrides generic colors. ------------------------------------------------------------- */
+
+            --ck-color-base-foreground: var(--ck-custom-background);
+            --ck-color-focus-border: hsl(208, 90%, 62%);
+            --ck-color-text: hsl(0, 0%, 98%);
+            --ck-color-shadow-drop: hsla(0, 0%, 0%, 0.2);
+            --ck-color-shadow-inner: hsla(0, 0%, 0%, 0.1);
+
+            /* -- Overrides the default .ck-button class colors. ---------------------------------------- */
+
+            --ck-color-button-default-background: var(--ck-custom-background);
+            --ck-color-button-default-hover-background: hsl(270, 1%, 22%);
+            --ck-color-button-default-active-background: hsl(270, 2%, 20%);
+            --ck-color-button-default-active-shadow: hsl(270, 2%, 23%);
+            --ck-color-button-default-disabled-background: var(--ck-custom-background);
+
+            --ck-color-button-on-background: var(--ck-custom-foreground);
+            --ck-color-button-on-hover-background: hsl(255, 4%, 16%);
+            --ck-color-button-on-active-background: hsl(255, 4%, 14%);
+            --ck-color-button-on-active-shadow: hsl(240, 3%, 19%);
+            --ck-color-button-on-disabled-background: var(--ck-custom-foreground);
+
+            --ck-color-button-action-background: hsl(168, 76%, 42%);
+            --ck-color-button-action-hover-background: hsl(168, 76%, 38%);
+            --ck-color-button-action-active-background: hsl(168, 76%, 36%);
+            --ck-color-button-action-active-shadow: hsl(168, 75%, 34%);
+            --ck-color-button-action-disabled-background: hsl(168, 76%, 42%);
+            --ck-color-button-action-text: var(--ck-custom-white);
+
+            --ck-color-button-save: hsl(120, 100%, 46%);
+            --ck-color-button-cancel: hsl(15, 100%, 56%);
+
+            /* -- Overrides the default .ck-dropdown class colors. -------------------------------------- */
+
+            --ck-color-dropdown-panel-background: var(--ck-custom-background);
+            --ck-color-dropdown-panel-border: var(--ck-custom-foreground);
+
+            /* -- Overrides the default .ck-splitbutton class colors. ----------------------------------- */
+
+            --ck-color-split-button-hover-background: var(--ck-color-button-default-hover-background);
+            --ck-color-split-button-hover-border: var(--ck-custom-foreground);
+
+            /* -- Overrides the default .ck-input class colors. ----------------------------------------- */
+
+            --ck-color-input-background: var(--ck-custom-background);
+            --ck-color-input-border: hsl(257, 3%, 43%);
+            --ck-color-input-text: hsl(0, 0%, 98%);
+            --ck-color-input-disabled-background: hsl(255, 4%, 21%);
+            --ck-color-input-disabled-border: hsl(250, 3%, 38%);
+            --ck-color-input-disabled-text: hsl(0, 0%, 78%);
+
+            /* -- Overrides the default .ck-labeled-field-view class colors. ---------------------------- */
+
+            --ck-color-labeled-field-label-background: var(--ck-custom-background);
+
+            /* -- Overrides the default .ck-list class colors. ------------------------------------------ */
+
+            --ck-color-list-background: var(--ck-custom-background);
+            --ck-color-list-button-hover-background: var(--ck-color-base-foreground);
+            --ck-color-list-button-on-background: var(--ck-color-base-active);
+            --ck-color-list-button-on-background-focus: var(--ck-color-base-active-focus);
+            --ck-color-list-button-on-text: var(--ck-color-base-background);
+
+            /* -- Overrides the default .ck-balloon-panel class colors. --------------------------------- */
+
+            --ck-color-panel-background: var(--ck-custom-background);
+            --ck-color-panel-border: var(--ck-custom-border);
+
+            /* -- Overrides the default .ck-toolbar class colors. --------------------------------------- */
+
+            --ck-color-toolbar-background: var(--ck-custom-background);
+            --ck-color-toolbar-border: var(--ck-custom-border);
+
+            /* -- Overrides the default .ck-tooltip class colors. --------------------------------------- */
+
+            --ck-color-tooltip-background: hsl(252, 7%, 14%);
+            --ck-color-tooltip-text: hsl(0, 0%, 93%);
+
+            /* -- Overrides the default colors used by the ckeditor5-image package. --------------------- */
+
+            --ck-color-image-caption-background: hsl(0, 0%, 97%);
+            --ck-color-image-caption-text: hsl(0, 0%, 20%);
+
+            /* -- Overrides the default colors used by the ckeditor5-widget package. -------------------- */
+
+            --ck-color-widget-blurred-border: hsl(0, 0%, 87%);
+            --ck-color-widget-hover-border: hsl(43, 100%, 68%);
+            --ck-color-widget-editable-focus-background: var(--ck-custom-white);
+
+            /* -- Overrides the default colors used by the ckeditor5-link package. ---------------------- */
+
+            --ck-color-link-default: hsl(190, 100%, 75%);
+
+            /*change input background in dark mode */
+
+            .ck.ck-editor__main > .ck-editor__editable {
+                background: var(--bs-body-bg);
+            }
+            .ck-content pre[data-language] code[class^="language-"] {
+                color: white;
+            }
+
+        }
+    }
+
+</style>
+<script src="https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/mathjax/3.2.2/es5/tex-svg.min.js"></script>
+<script src="https://registry.npmmirror.com/ckeditor5/41.0.0/files/build/ckeditor5-dll.js"></script>
+<script src="https://registry.npmmirror.com/@ckeditor/ckeditor5-editor-classic/41.0.0/files/build/editor-classic.js"></script>
+<script src="https://registry.npmmirror.com/@ckeditor/ckeditor5-essentials/41.0.0/files/build/essentials.js"></script>
+<script src="https://registry.npmmirror.com/@ckeditor/ckeditor5-autoformat/41.0.0/files/build/autoformat.js"></script>
+<script src="https://registry.npmmirror.com/@ckeditor/ckeditor5-basic-styles/41.0.0/files/build/basic-styles.js"></script>
+<script src="https://registry.npmmirror.com/@ckeditor/ckeditor5-block-quote/41.0.0/files/build/block-quote.js"></script>
+<script src="https://registry.npmmirror.com/@ckeditor/ckeditor5-easy-image/41.0.0/files/build/easy-image.js"></script>
+<script src="https://registry.npmmirror.com/@ckeditor/ckeditor5-heading/41.0.0/files/build/heading.js"></script>
+<script src="https://registry.npmmirror.com/@ckeditor/ckeditor5-image/41.0.0/files/build/image.js"></script>
+<script src="https://registry.npmmirror.com/@ckeditor/ckeditor5-indent/41.0.0/files/build/indent.js"></script>
+<script src="https://registry.npmmirror.com/@ckeditor/ckeditor5-link/41.0.0/files/build/link.js"></script>
+<script src="https://registry.npmmirror.com/@ckeditor/ckeditor5-list/41.0.0/files/build/list.js"></script>
+<script src="https://registry.npmmirror.com/@ckeditor/ckeditor5-media-embed/41.0.0/files/build/media-embed.js"></script>
+<script src="https://registry.npmmirror.com/@ckeditor/ckeditor5-paste-from-office/41.0.0/files/build/paste-from-office.js"></script>
+<script src="https://registry.npmmirror.com/@ckeditor/ckeditor5-table/41.0.0/files/build/table.js"></script>
+<!--<script src="https://registry.npmmirror.com/@ckeditor/ckeditor5-cloud-services/41.0.0/files/build/cloud-services.js"></script>-->
+<!--<script src="https://registry.npmmirror.com/@ckeditor/ckeditor5-html-embed/41.0.0/files/build/html-embed.js"></script>-->
+<script src="https://registry.npmmirror.com/@ckeditor/ckeditor5-code-block/41.0.0/files/build/code-block.js"></script>
+<script src="https://registry.npmmirror.com/@ckeditor/ckeditor5-ckbox/41.0.0/files/build/ckbox.js"></script>
+<script src="https://registry.npmmirror.com/@ckeditor/ckeditor5-markdown-gfm/41.0.0/files/build/markdown-gfm.js"></script>
+<script src="https://registry.npmmirror.com/@ckeditor/ckeditor5-word-count/41.0.0/files/build/word-count.js"></script>
+{#<script src="https://registry.npmmirror.com/@isaul32/ckeditor5-math/41.0.0/files/build/math.js"></script>#}
+<script src="https://mirrors.sustech.edu.cn/unpkg/@isaul32/ckeditor5-math@41.0.0/build/math.js"></script>
+
+
+{#<script src="https://mirrors.sustech.edu.cn/unpkg/ckeditor5@41.0.0/build/ckeditor5-dll.js"></script>#}
+{#<script src="https://mirrors.sustech.edu.cn/unpkg/@ckeditor/ckeditor5-editor-classic@41.0.0/build/editor-classic.js"></script>#}
+{#<script src="https://mirrors.sustech.edu.cn/unpkg/@ckeditor/ckeditor5-essentials@41.0.0/build/essentials.js"></script>#}
+{#<script src="https://mirrors.sustech.edu.cn/unpkg/@ckeditor/ckeditor5-autoformat@41.0.0/build/autoformat.js"></script>#}
+{#<script src="https://mirrors.sustech.edu.cn/unpkg/@ckeditor/ckeditor5-basic-styles@41.0.0/build/basic-styles.js"></script>#}
+{#<script src="https://mirrors.sustech.edu.cn/unpkg/@ckeditor/ckeditor5-block-quote@41.0.0/build/block-quote.js"></script>#}
+{#<script src="https://mirrors.sustech.edu.cn/unpkg/@ckeditor/ckeditor5-easy-image@41.0.0/build/easy-image.js"></script>#}
+{#<script src="https://mirrors.sustech.edu.cn/unpkg/@ckeditor/ckeditor5-heading@41.0.0/build/heading.js"></script>#}
+{#<script src="https://mirrors.sustech.edu.cn/unpkg/@ckeditor/ckeditor5-image@41.0.0/build/image.js"></script>#}
+{#<script src="https://mirrors.sustech.edu.cn/unpkg/@ckeditor/ckeditor5-indent@41.0.0/build/indent.js"></script>#}
+{#<script src="https://mirrors.sustech.edu.cn/unpkg/@ckeditor/ckeditor5-link@41.0.0/build/link.js"></script>#}
+{#<script src="https://mirrors.sustech.edu.cn/unpkg/@ckeditor/ckeditor5-list@41.0.0/build/list.js"></script>#}
+{#<script src="https://mirrors.sustech.edu.cn/unpkg/@ckeditor/ckeditor5-media-embed@41.0.0/build/media-embed.js"></script>#}
+{#<script src="https://mirrors.sustech.edu.cn/unpkg/@ckeditor/ckeditor5-paste-from-office@41.0.0/build/paste-from-office.js"></script>#}
+{#<script src="https://mirrors.sustech.edu.cn/unpkg/@ckeditor/ckeditor5-table@41.0.0/build/table.js"></script>#}
+{#<!--<script src="https://mirrors.sustech.edu.cn/unpkg/@ckeditor/ckeditor5-cloud-services@41.0.0/build/cloud-services.js"></script>-->#}
+{#<!--<script src="https://mirrors.sustech.edu.cn/unpkg/@ckeditor/ckeditor5-html-embed@41.0.0/build/html-embed.js"></script>-->#}
+{#<script src="https://mirrors.sustech.edu.cn/unpkg/@ckeditor/ckeditor5-code-block@41.0.0/build/code-block.js"></script>#}
+{#<script src="https://mirrors.sustech.edu.cn/unpkg/@ckeditor/ckeditor5-ckbox@41.0.0/build/ckbox.js"></script>#}
+{#<script src="https://mirrors.sustech.edu.cn/unpkg/@ckeditor/ckeditor5-markdown-gfm@41.0.0/build/markdown-gfm.js"></script>#}
+{#<script src="https://mirrors.sustech.edu.cn/unpkg/@ckeditor/ckeditor5-word-count@41.0.0/build/word-count.js"></script>#}
+{#<script src="https://mirrors.sustech.edu.cn/unpkg/@isaul32/ckeditor5-math@41.0.0/build/math.js"></script>#}
+
+
+
+<script src="/static/ckeditor5-plugin/file-upload.js"></script>
+
+
+<script>
+    var uploadImageApi = document.location.origin + "/api/upload/image";
+    var uploadFileApi = document.location.origin + "/api/upload/file";
+    var selector_1 = document.querySelector('#content-editor');
+    var selector_2 = document.querySelector('.content-editor');
+
+    function initEditor(selector) {
+        if (!selector) {
+            return;
+        }
+        CKEditor5.editorClassic.ClassicEditor.create(selector, {
+            heading: {
+                options: [
+                    {model: 'paragraph', title: 'Paragraph', class: 'ck-heading_paragraph'},
+                    {model: 'heading1', view: 'h3', title: 'Heading 1', class: 'ck-heading_heading1'},
+                    {model: 'heading2', view: 'h4', title: 'Heading 2', class: 'ck-heading_heading2'},
+                    {model: 'heading3', view: 'h5', title: 'Heading 3', class: 'ck-heading_heading3'}
+                ]
+            },
+            plugins: [
+                CKEditor5.essentials.Essentials,
+                CKEditor5.autoformat.Autoformat,
+                CKEditor5.basicStyles.Bold,
+                CKEditor5.basicStyles.Italic,
+                CKEditor5.basicStyles.Underline,
+                CKEditor5.basicStyles.Code,
+                CKEditor5.basicStyles.Strikethrough,
+                CKEditor5.blockQuote.BlockQuote,
+                CKEditor5.heading.Heading,
+                CKEditor5.image.Image,
+                CKEditor5.image.ImageCaption,
+                CKEditor5.image.ImageStyle,
+                CKEditor5.image.ImageToolbar,
+                CKEditor5.image.ImageUpload,
+                CKEditor5.image.ImageResize,
+                CKEditor5.image.ImageInsert,
+                CKEditor5.image.AutoImage,
+                CKEditor5.image.PictureEditing,
+                CKEditor5.indent.Indent,
+                CKEditor5.link.Link,
+                CKEditor5.list.List,
+                CKEditor5.mediaEmbed.MediaEmbed,
+                CKEditor5.pasteFromOffice.PasteFromOffice,
+                CKEditor5.table.Table,
+                CKEditor5.table.TableCaption,
+                CKEditor5.table.TableProperties,
+                CKEditor5.table.TableCellProperties,
+                CKEditor5.table.TableToolbar,
+                CKEditor5.typing.TextTransformation,
+                CKEditor5.codeBlock.CodeBlock,
+                CKEditor5.markdownGfm.PasteFromMarkdownExperimental,
+                CKEditor5.wordCount.WordCount,
+                CKEditor5.math.Math,
+                CKEditor5.math.AutoformatMath,
+                CKEditor5.fileUpload.FileUpload,
+                CKEditor5.fileUpload.SimpleFileUploadAdapter
+            ],
+            toolbar: {
+                items: [
+                    'heading',
+                    '|',
+                    'bold',
+                    'italic',
+                    'underline',
+                    'strikethrough',
+                    'link',
+                    'bulletedList',
+                    'numberedList',
+                    '|',
+                    'outdent',
+                    'indent',
+                    '|',
+                    'code',
+                    'codeBlock',
+                    'uploadImage',
+                    'fileUpload',
+                    'blockQuote',
+                    'insertTable',
+                    'undo',
+                    'redo',
+                    'math',
+                ],
+                shouldNotGroupWhenFull: true
+            },
+            math: {
+                engine: 'mathjax', // or katex or function. E.g. (equation, element, display) => { ... }
+                lazyLoad: async () => {
+                    // a dirty hack for ckeditor math plugin loaded before async mathjax
+                    return new Promise((resolve, reject) => {
+                        // if MathJax is not loaded, wait 1s and try again
+                        var interval = setInterval(() => {
+                            // console.log("waiting for MathJax")
+                            if (window.MathJax.version) {
+                                clearInterval(interval);
+                                resolve();
+                            }
+                        }, 2000);
+                    })
+                },
+                outputType: 'span', // or span
+                className: 'math-tex', // class name to use with span output type, change e.g. MathJax processClass (v2) / processHtmlClass (v3) is set
+                forceOutputType: false, // forces output to use outputType
+                enablePreview: true, // Enable preview view
+                previewClassName: [], // Class names to add to previews
+                popupClassName: [], // Class names to add to math popup balloon
+                katexRenderOptions: {}  // KaTeX only options for katex.render(ToString)
+            },
+            simpleFileUpload: {
+                url: uploadFileApi,
+                withCredentials: true,
+                fileTypes: ['.7z', '.avi', '.csv', '.doc', '.docx', '.flv', '.gif', '.gz', '.gzip', '.jpeg', '.jpg', '.mov', '.mp3', '.mp4', '.mpc', '.mpeg', '.mpg', '.ods', '.odt', '.pdf', '.png', '.ppt', '.pptx', '.ps', '.pxd', '.rar', '.rtf', '.tar', '.tgz', '.txt', '.vsd', '.wav', '.wma', '.wmv', '.xls', '.xlsx', '.xml', '.zip'],
+            },
+            language: 'en',
+            image: {
+                resizeOptions: [
+                    {
+                        name: 'resizeImage:original',
+                        value: null,
+                        icon: 'original'
+                    },
+                    {
+                        name: 'resizeImage:50',
+                        value: '50',
+                        icon: 'medium'
+                    },
+                    {
+                        name: 'resizeImage:75',
+                        value: '75',
+                        icon: 'large'
+                    }
+                ],
+                toolbar: [
+                    'resizeImage:50',
+                    'resizeImage:75',
+                    'resizeImage:original',
+                    'toggleImageCaption',
+                    'imageTextAlternative'
+                ]
+            },
+            table: {
+                tableProperties: {
+                    defaultProperties: {
+                        borderStyle: 'dashed',
+                        borderColor: 'hsl(0, 0%, 90%)',
+                        borderWidth: '3px',
+                        alignment: 'left'
+                    }
+                },
+                contentToolbar: [
+                    'tableColumn',
+                    'tableRow',
+                    'mergeTableCells'
+                ]
+            },
+            wordCount: {
+                 onUpdate: stats => {
+                     //console.log( 'Characters: ' + stats.characters );
+                     var wordCountElement = document.getElementById('word-count');
+                     // 更新元素的内容
+                     wordCountElement.textContent = '字数: ' + stats.characters;
+                 }
+            },
+            licenseKey: '',
+        })
+            .then(editor => {
+                window.editor = editor;
+                editor.editing.view.change(writer => {
+                    writer.setStyle('min-height', '350px', editor.editing.view.document.getRoot());
+                });
+            })
+            .catch(error => {
+                console.error('Oops, something gone wrong!');
+                console.error('Please, report the following error in the https://github.com/ckeditor/ckeditor5 with the build id and the error stack trace:');
+                console.warn('Build id: k2i30chx32nf-8o65j7c6blw0');
+                console.error(error);
+            });
+    }
+
+    initEditor(selector_1);
+    initEditor(selector_2);
+</script>
