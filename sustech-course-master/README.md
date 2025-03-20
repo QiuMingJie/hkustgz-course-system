@@ -1,107 +1,138 @@
-# USTC 评课社区
+# HKUST-GZ 课程评价系统
 
-USTC 评课社区是使用 Python 3 + Flask + SQLAlchemy 开发的 Web 系统。
+港科广课程评价系统是一个为香港科技大学（广州）学生提供的课程信息和评价平台。学生可以在这里查看课程信息、分享课程体验、获取AI辅导等功能。
 
-## sustech-course对代码的主要修改
+## 功能特点
 
-- 适配sustech tis（课程，教师导入）
-- 尽可能从cdn加载js/css
-- 适配CKEditor5
-- 适配bootstrap5（WIP）
+- 课程信息浏览和搜索
+- 课程评价和评分系统
+- 教师信息查看
+- 用户认证（仅限港科广邮箱）
+- AI智能助手（新功能）
+- 响应式设计，支持移动端访问
+- 暗色模式支持
 
-## 安装
+## 环境配置
 
-安装此系统前，请首先安装：
+### 系统要求
 
-1. Python 3
-2. MySQL 5.5+
-3. Nginx
+- Python 3.8+
+- MySQL 5.7+
+- Redis (可选，用于缓存)
 
-### 配置和创建数据库
+### 安装步骤
 
-在 MySQL 配置文件（如 ```/etc/mysql/my.cnf```）末尾加入如下几行，重启数据库（如 ```service mysql restart```）。这几行是设置数据库使用 utf8mb4 作为默认连接字符集和存储字符集，以免出现乱码，并且支持 emoji。
-
-```
-[client]
-default-character-set=utf8mb4
-[mysql]
-default-character-set=utf8mb4
-[mysqld]
-collation-server = utf8mb4_unicode_ci
-init-connect='SET NAMES utf8mb4 COLLATE utf8mb4_unicode_ci'
-character-set-server = utf8mb4
+1. 克隆项目并进入目录
+```bash
+git clone [repository_url]
+cd sustech-course-master
 ```
 
-然后创建数据库：```mysql -u root -p``` 进入 mysql 控制台。
-
-```CREATE DATABASE icourse;```
-创建数据库成功的话，会提示 Query OK...
-
-对于 MySQL 版本 < 8.0:
-```GRANT ALL ON icourse.* to 'ustc_course'@'localhost' identified by 'ustc_course';```
-
-对于 MySQL 版本 >= 8.0:
+2. 创建并激活虚拟环境
+```bash
+python -m venv venv
+source venv/bin/activate  # Linux/Mac
+# 或
+venv\Scripts\activate  # Windows
 ```
-CREATE USER 'ustc_course'@'localhost' identified by 'ustc_course';
-GRANT ALL ON icourse.* to 'ustc_course'@'localhost';
+
+3. 安装依赖
+```bash
+pip install -r requirements.txt
 ```
-这一步是创建数据库用户 ustc_course 并授予访问 icourse 数据库的权限。该用户密码是 ustc_course，生产环境上请换用强密码。
 
-### Python 依赖及系统设置
+4. 配置环境变量
+```bash
+cp config/default.py config/development.py
+```
+编辑 `config/development.py`，设置以下配置：
+- 数据库连接信息
+- 邮件服务器配置
+- AI API密钥（如果使用AI功能）
+- 其他必要的配置项
 
-安装 Python 依赖库：```pip3 install -r requirements.txt```。其中 ```requirements.txt``` 是版本库根目录下的文件。
+5. 初始化数据库
+```bash
+flask db upgrade
+```
 
-如果 pip3 过程中出现错误，可能是缺少编译这些 Python 库所需的依赖。在 Ubuntu/Debian 系统上，可以 ```apt-get install python3-dev libxslt1-dev libxml2-dev libmysqlclient-dev```
+6. 运行开发服务器
+```bash
+python run.py -d
+```
 
-修改系统配置文件 ```config/default.py```。
+访问 http://127.0.0.1:2021 即可看到网站。
 
-* ```DEBUG``` 开关用于标识是否启用调试模式。
-* ```SERVER_NAME``` 设置服务器域名，若域名未确定则可设为 None。
-* ```SECRET_KEY``` 是用于验证 cookie 的加密密钥，填入一个随机字符串。
-* ```SQLALCHEMY_DATABASE_URI``` 是数据库连接信息，格式为 ```mysql+mysqldb://用户名:密码@数据库地址/数据库名?charset=utf8mb4```。
-* ```MAIL_*``` 是外发邮件的发件人信息。
-* ```UPLOAD_FOLDER``` 是头像、用户上传的附件等存储的地方。在生产服务器上需要有足够大的剩余空间，并定期备份。
-* ```MAX_CONTENT_LENGTH``` 是上传文件的最大大小。
+## 项目结构
 
-初始化数据库：```python -m tests.init_db```，如果没有报错就初始化成功了。
+```
+sustech-course-master/
+├── app/                    # 应用主目录
+│   ├── models/            # 数据模型
+│   ├── views/             # 视图函数
+│   ├── templates/         # 模板文件
+│   ├── static/            # 静态文件
+│   └── utils/             # 工具函数
+├── config/                # 配置文件
+├── migrations/            # 数据库迁移文件
+├── tests/                 # 测试文件
+└── run.py                 # 启动脚本
+```
 
-### 配置 Nginx
+## 待开发功能
 
-如果您已经安装了其他 Web 服务器（如 Apache）或者已经有 Nginx 配置，请参考 ```tests/conf/nginx-config``` 来修改。
+### 1. AI助手功能完善
+- [ ] 接入实际的AI API（如OpenAI、文心一言等）
+- [ ] 实现聊天历史的数据库存储
+- [ ] 添加更多AI功能（课程推荐、学习计划生成等）
+- [ ] 优化AI响应的性能和稳定性
 
-如果是刚刚安装的 nginx，可以直接使用如下配置文件：
+### 2. 用户体验优化
+- [ ] 实现用户个性化设置
+- [ ] 添加课程收藏功能
+- [ ] 优化移动端适配
+- [ ] 改进搜索功能（支持模糊搜索和高级筛选）
 
-1. ```cp tests/conf/nginx-config /etc/nginx/sites-available/default```
-2. ```sudo service mysql restart```
+### 3. 社区功能增强
+- [ ] 添加用户间私信功能
+- [ ] 实现课程讨论区
+- [ ] 添加课程资料共享功能
+- [ ] 建立教师-学生互动平台
 
-运行 ```./run.py```，访问 ```http://localhost``` 即可以 debug 模式开始运行此系统。
+### 4. 系统性能优化
+- [ ] 实现缓存机制
+- [ ] 优化数据库查询
+- [ ] 添加异步任务处理
+- [ ] 实现分布式部署支持
 
-如果出现问题，请首先看 ```./run.py``` 的终端有无输出，如果没有，则是 nginx 的问题，可以访问 ```http://localhost:8080``` 来测试；如果 Python 有报异常，则可根据异常信息排查。
+### 5. 安全性增强
+- [ ] 实现更完善的权限管理
+- [ ] 添加操作日志记录
+- [ ] 实现敏感信息加密
+- [ ] 添加防爬虫措施
 
-在生产服务器上，需要把 nginx 配置文件（```/etc/nginx/sites-available/default```）中的 8080 替换成 3000，把 ```config/default.py``` 和 ```run.py``` 中的 ```DEBUG=True``` 改为 ```DEBUG=False```。
+## 贡献指南
 
-## 开发
+1. Fork 项目
+2. 创建功能分支 (`git checkout -b feature/AmazingFeature`)
+3. 提交更改 (`git commit -m 'Add some AmazingFeature'`)
+4. 推送到分支 (`git push origin feature/AmazingFeature`)
+5. 提交 Pull Request
 
-请首先学习 Flask + SQLAlchemy 的 Web 开发。系统的主要文件在 app 目录下，
+## 注意事项
 
-* forms 是表单验证
-* models 是 ORM 类
-* static 是静态文件，由 nginx 直接返回给用户
-* templates 是页面模板
-* views 是各种功能的业务逻辑
-* utils.py 是工具函数
+- 确保所有代码更改都经过测试
+- 遵循项目的代码风格指南
+- 保护用户隐私和数据安全
+- 遵守开源协议
 
-## License
+## 技术支持
 
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU Affero General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
+如有问题或建议，请通过以下方式联系我们：
+- 提交 Issue
+- 发送邮件至：[Jruan189@connect.hkust-gz.edu.cn]
+- 访问我们的帮助文档：[docs_url]
 
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Affero General Public License for more details.
+## 许可证
 
-You should have received a copy of the GNU Affero General Public License
-along with this program.  If not, see <http://www.gnu.org/licenses/>.
+本项目采用 [许可证类型] 许可证 - 查看 [LICENSE](LICENSE) 文件了解更多详情。
