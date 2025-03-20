@@ -20,7 +20,7 @@ LANGUAGES = {
 
 
 # SQL config
-SQLALCHEMY_DATABASE_URI = 'mysql+mysqldb://icourse:your-db-password@localhost/icourse?charset=utf8mb4'
+SQLALCHEMY_DATABASE_URI = 'mysql+mysqldb://root:@localhost/icourse?charset=utf8mb4'
 SQLALCHEMY_TRACK_MODIFICATIONS = False
 
 # Flask mail
@@ -52,10 +52,11 @@ IMAGE_PATH = 'uploads/images'
 
 # Debugbar Settings
 # Enable the profiler on all requests
-DEBUG_TB_PROFILER_ENABLED = True
+DEBUG_TB_PROFILER_ENABLED = False
 # Enable the template editor
-DEBUG_TB_TEMPLATE_EDITOR_ENABLED = True
+DEBUG_TB_TEMPLATE_EDITOR_ENABLED = False
 DEBUG_TB_INTERCEPT_REDIRECTS = False
+DEBUG_TB_ENABLED = False
 
 # OAUTH Settings
 OAUTH = {  # 配置参数，如果没有设置正确，OAuth流程就会失败
@@ -67,3 +68,12 @@ OAUTH = {  # 配置参数，如果没有设置正确，OAuth流程就会失败
     "token_url": '',
     "api_url": ''
 }
+
+# Cloudflare Turnstile Settings
+RECAPTCHA_SITE_KEY = '0x4AAAAAABBpSp3f59fEQteR'  # 这是一个示例密钥，需要替换为实际的密钥
+RECAPTCHA_SECRET_KEY = '0x4AAAAAABBpSthFZxGikevwf9aY-kHtFMo'  # 这是一个示例密钥，需要替换为实际的密钥
+
+# S3 Config
+S3_CONFIG = None
+S3_BUCKET_NAME = None
+S3_REGION = None

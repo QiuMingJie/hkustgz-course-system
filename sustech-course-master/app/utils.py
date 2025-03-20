@@ -30,7 +30,7 @@ def rand_str():
 
 
 def send_confirm_mail(email):
-    subject = '[NCES评课系统] Confirm your email.'
+    subject = '[HKUST-GZ评课系统] 确认您的邮箱'
     token = ts.dumps(email, salt=app.config['EMAIL_CONFIRM_SECRET_KEY'])
 
     confirm_url = url_for(
@@ -38,7 +38,7 @@ def send_confirm_mail(email):
         action='confirm',
         token=token,
         _external=True,
-        _scheme='https')
+        _scheme='http')
     html = render_template('email/activate.html',
             confirm_url = confirm_url)
 
@@ -46,14 +46,14 @@ def send_confirm_mail(email):
     mail.send(msg)
 
 def send_reset_password_mail(email):
-    subject = '[NCES评课系统] Reset your password'
+    subject = '[HKCES评课系统] 重置您的密码'
     token = ts.dumps(email, salt=app.config['PASSWORD_RESET_SECRET_KEY'])
 
     reset_url = url_for(
         'home.reset_password',
         token=token,
         _external=True,
-        _scheme='https')
+        _scheme='http')
     html = render_template('email/reset-password.html',
             reset_url = reset_url)
 
@@ -363,9 +363,9 @@ def validate_username(username, check_db=True):
     return 'OK'
 
 def validate_email(email):
-    regex = re.compile("[a-zA-Z0-9_]+@(mail\.)?sustech\.edu\.cn")
+    regex = re.compile("[a-zA-Z0-9_]+@(connect\.)?hkust-gz\.edu\.cn")
     if not regex.fullmatch(email):
-        return ('必须使用南科大邮箱注册!')
+        return ('必须使用港科广邮箱注册!')
     if User.query.filter_by(email=email).first():
         return ('此邮件地址已被注册！')
     return 'OK'

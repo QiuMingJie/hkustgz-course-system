@@ -2,7 +2,7 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
 <channel>
   <atom:link href="https://nces.cra.moe/feed.xml" rel="self" type="application/rss+xml" />
-  <title>Niuwa Curriculum Evaluation System - 全站最新点评</title>
+  <title>HKUST-GZ Curriculum Evaluation System - 全站最新点评</title>
   <link>https://nces.cra.moe</link>
   <description>评课是为了更好地选课！</description>
   {% for review in reviews.items %}

@@ -4,7 +4,7 @@ from flask_babel import gettext as _
 from app.models import *
 from app import db
 from app.utils import sanitize, utils_export_rankings_pdf, get_rankings_history_file_list, get_rankings_history_base
-from sqlalchemy import or_, func, sql
+from sqlalchemy import or_, func, sql, distinct
 from datetime import datetime
 
 stats = Blueprint('stats',__name__)
@@ -78,16 +78,18 @@ def view_ranking():
 
     # helper queries for fetching top teachers
     # join Teacher, Course, Review, Dept classes via course_teachers intermediate table
-    teacher_rank_join = sql.outerjoin(sql.join(Teacher, sql.join(course_teachers, sql.join(Course, Review, Course.id == Review.course_id), course_teachers.c.course_id == Course.id), course_teachers.c.teacher_id == Teacher.id), Dept, Dept.id == Course.dept_id)
+    teacher_rank_join = sql.join(Teacher, sql.join(course_teachers, sql.join(Course, Review, Course.id == Review.course_id), course_teachers.c.course_id == Course.id), Teacher.id == course_teachers.c.teacher_id).join(Dept, Dept.id == Course.dept_id)
+
     # find teachers with low rating courses (average rate < 8)
     teachers_with_low_rating_course = sql.select(Teacher.id).join(course_teachers).join(Course).join(CourseRate).filter(CourseRate._rate_average > 0).filter(CourseRate._rate_average < 8)
+    
     # find teachers with at least 3 high rating courses (average rate > 9)
     teacher_query_with_high_rating_course = sql.select(Teacher.id.label('teacher_id'), func.count(CourseRate.id).label('course_count')).select_from(sql.join(Teacher, sql.join(course_teachers, CourseRate, course_teachers.c.course_id == CourseRate.id), Teacher.id == course_teachers.c.teacher_id)).filter(CourseRate._rate_average > 9).group_by(Teacher.id)
     teachers_with_high_rating_course = db.session.query(db.text('teacher_id')).select_from(teacher_query_with_high_rating_course).filter(db.text('course_count >= 3')).all()
     # we have to get the teachers to Python instead of using SQL subquery due to a problem in sqlalchemy
     teachers_with_high_rating_course = [teacher[0] for teacher in teachers_with_high_rating_course]
 
-    # helper subquery for finding average and total review rating of teachers because SQL does not allow ordering by aggregation fields
+    # helper subquery for finding average and total review rating of teachers
     teacher_rank_unordered = (db.session.query(Teacher.id.label('teacher_id'),
                                                Teacher.name.label('teacher_name'),
                                                Dept.name.label('dept_id'),
@@ -97,19 +99,17 @@ def view_ranking():
                               .select_from(teacher_rank_join)
                               .filter(Teacher.id.not_in(teachers_with_low_rating_course))
                               .filter(Teacher.id.in_(teachers_with_high_rating_course))
-                              .group_by(Teacher.id)
+                              .group_by(Teacher.id, Teacher.name, Dept.name)
                               .subquery())
 
-    # find top 10 teachers with at least 3 high rating courses and does not have any low rating course
-    # definition of high rating courses: average rate > 9
-    # definition of low rating course: average rate < 8
-    # order by: normalized rating: (total_rate + avg_rate * avg_rate_count) / (rate_count + avg_rate_count)
-    #                              total_rate is the sum of rates to this teacher
-    #                              avg_rate is the average rating across the entire site
-    #                              avg_rate_count is the average number of ratings per course across the entire site
-    #                              rate_count is the number of ratings to this teacher
-    #           The normalized rating is equivalent to adding avg_rate_count number of reviews with avg_rate to each teacher.
-    teacher_rank = (db.session.query(db.text('teacher_id'), db.text('teacher_name'), db.text('dept_id'), db.text('course_count'), db.text('review_count'), Course.generic_query_order(db.text('total_review_rate'), db.text('review_count')).label('normalized_review_rate'))
+    # find top teachers with normalized rating
+    teacher_rank = (db.session.query(db.text('teacher_id'), 
+                                    db.text('teacher_name'), 
+                                    db.text('dept_id'), 
+                                    db.text('course_count'), 
+                                    db.text('review_count'),
+                                    Course.generic_query_order(db.text('total_review_rate'), 
+                                                            db.text('review_count')).label('normalized_review_rate'))
                               .select_from(teacher_rank_unordered)
                               .order_by(db.text('normalized_review_rate desc'))
                               .limit(topk_count).all())

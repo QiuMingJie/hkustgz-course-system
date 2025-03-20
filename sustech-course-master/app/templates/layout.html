@@ -5,10 +5,10 @@
     <nav class="navbar navbar-expand-lg shadow">
       <div class="container">
         <a class="navbar-brand fw-bold desktop" href="{{ url_for('home.index') }}">
-          <i class="fa-solid fa-pencil"></i> Niuwa Curriculum Evaluation System
+          <img src="/static/image/footer-logo-white.png" alt="HKUST-GZ logo" style="height: 30px; margin-right: 10px;"> HKUST-GZ Course Evaluation System
         </a>
         <a class="navbar-brand fw-bold mobile" href="{{ url_for('home.index') }}">
-          <i class="fa-solid fa-pencil"></i> NCES
+          <img src="/static/image/footer-logo-white.png" alt="HKUST-GZ logo" style="height: 25px; margin-right: 5px;"> HKCES
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
@@ -28,7 +28,15 @@
             </li>
             {% endif %}
             <li class="nav-item">
-              <a class="nav-link" href="https://mirrors.sustech.edu.cn/courses/本科人才培养方案/" target="_blank">培养方案</a>
+              <a class="nav-link {% if this_module and this_module=='stats.view_ranking' %}active{% endif %}" href="{{ url_for('stats.view_ranking') }}">排行榜</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="https://ug-prog-crs.hkust-gz.edu.cn/#/introduce/detail?id=Artificial%20Intelligence" target="_blank">培养方案</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link {% if this_module and this_module=='ai.chat' %}active{% endif %}" href="{{ url_for('ai.chat') }}">
+                <i class="fa-solid fa-robot"></i> AI助手
+              </a>
             </li>
           <!--
             <li class="nav-item">

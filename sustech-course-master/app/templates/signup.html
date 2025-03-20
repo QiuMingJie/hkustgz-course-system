@@ -3,75 +3,99 @@
 <!--<script src='https://recaptcha.google.cn/recaptcha/api.js'></script>-->
 <script src='https://challenges.cloudflare.com/turnstile/v0/api.js' async defer></script>
 
-{% for message in get_flashed_messages(category_filter=["error"]) %}
-<div class="alert alert-danger" role="alert">
+{% with messages = get_flashed_messages() %}
+{% if messages %}
+<div class="container">
+  {% for message in messages %}
+  <div class="alert alert-danger" role="alert">
     {{ message }}
+  </div>
+  {% endfor %}
 </div>
-{% endfor %}
+{% endif %}
+{% endwith %}
 
 <div class="container">
-  <div class="row">
-    {{ error }}
+  <div class="row float-element shadow">
     <h3 class="text-primary mb-3">注册</h3>
     <hr>
     <form class="row g-3" method="post" action="{{ url_for('home.signup') }}" novalidate>
-      <input  hidden name="csrf_token" value="{{ csrf_token() }}">
+      <input hidden name="csrf_token" value="{{ csrf_token() }}">
 
       <div class="col-md-6">
-      <label for="reginput-email" class="form-label">南科大邮箱（学生请使用数字邮箱）</label>
-      <input type="email" class="form-control" id="reginput-email" name="email" placeholder="sid@mail.sustech.edu.cn or tid@sustech.edu.cn" required pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$">
-      <div id="emailFeedback" class="invalid-feedback">请输入有效的邮箱地址</div>
-        {% if form.errors.get('email') %}
-          <div class="invalid-feedback">
-            {% for info in form.errors.get('email') %}
-              {{ info }}
+        <label for="reginput-email" class="form-label">港科广邮箱（学生使用@connect.hkust-gz.edu.cn，教师使用@hkust-gz.edu.cn）</label>
+        <input type="email" class="form-control {% if form.errors.get('email') %}is-invalid{% endif %}" 
+               id="reginput-email" name="email" 
+               placeholder="student@connect.hkust-gz.edu.cn or teacher@hkust-gz.edu.cn" 
+               required pattern="[a-z0-9._%+-]+@(connect\.)?hkust-gz\.edu\.cn$"
+               value="{{ form.email.data if form.email.data }}">
+        <div class="invalid-feedback">
+          {% if form.errors.get('email') %}
+            {% for error in form.errors.get('email') %}
+              {{ error }}
             {% endfor %}
-          </div>
-        {% endif %}
+          {% else %}
+            请输入有效的港科广邮箱地址
+          {% endif %}
+        </div>
       </div>
 
-      <!-- Username Field -->
       <div class="col-md-6">
-        <label for="reginput-username" class="form-label">用户名（仅限中英文及数字，下划线）</label>
-        <input type="text" class="form-control" id="reginput-username" name="username" placeholder="Username" required>
-        <div id="usernameFeedback" class="invalid-feedback">用户名为空或已被占用</div>
-        {% if form.errors.get('username') %}
-          <div class="invalid-feedback">
-            {% for info in form.errors.get('username') %}
-              {{ info }}
+        <label for="reginput-username" class="form-label">用户名（仅限中英文及数字，下划线，最多50个字符）</label>
+        <input type="text" class="form-control {% if form.errors.get('username') %}is-invalid{% endif %}" 
+               id="reginput-username" name="username" 
+               placeholder="Username" required maxlength="50"
+               value="{{ form.username.data if form.username.data }}">
+        <div class="invalid-feedback">
+          {% if form.errors.get('username') %}
+            {% for error in form.errors.get('username') %}
+              {{ error }}
             {% endfor %}
-          </div>
-        {% endif %}
+          {% else %}
+            用户名为空或已被占用，或超过50个字符
+          {% endif %}
+        </div>
       </div>
 
-    <!-- Password Field -->
-    <div class="col-md-6">
-      <label for="reginput-password" class="form-label">密码</label>
-      <input type="password" class="form-control" id="reginput-password" name="password" placeholder="Password" minlength="8" required>
-      <div id="passwordLengthFeedback" class="invalid-feedback">密码长度必须至少为8个字符</div>
-        {% if form.errors.get('password') %}
-          <div class="invalid-feedback">
-            {% for info in form.errors.get('password') %}
-              {{ info }}
+      <div class="col-md-6">
+        <label for="reginput-password" class="form-label">密码</label>
+        <input type="password" class="form-control {% if form.errors.get('password') %}is-invalid{% endif %}" 
+               id="reginput-password" name="password" 
+               placeholder="Password" minlength="8" required>
+        <div class="invalid-feedback">
+          {% if form.errors.get('password') %}
+            {% for error in form.errors.get('password') %}
+              {{ error }}
             {% endfor %}
-          </div>
-        {% endif %}
+          {% else %}
+            密码长度必须至少为8个字符
+          {% endif %}
+        </div>
       </div>
 
-    <!-- Confirm Password Field -->
-    <div class="col-md-6">
-      <label for="reginput-confirm-password" class="form-label">确认密码</label>
-      <input type="password" class="form-control" id="reginput-confirm-password" name="confirm_password" placeholder="Confirm Password" required>
-      <div id="confirmPasswordFeedback" class="invalid-feedback">密码不匹配</div>
-    </div>
+      <div class="col-md-6">
+        <label for="reginput-confirm-password" class="form-label">确认密码</label>
+        <input type="password" class="form-control {% if form.errors.get('confirm_password') %}is-invalid{% endif %}" 
+               id="reginput-confirm-password" name="confirm_password" 
+               placeholder="Confirm Password" required>
+        <div class="invalid-feedback">
+          {% if form.errors.get('confirm_password') %}
+            {% for error in form.errors.get('confirm_password') %}
+              {{ error }}
+            {% endfor %}
+          {% else %}
+            密码不匹配
+          {% endif %}
+        </div>
+      </div>
 
       <div class="col-12">
-        完成验证码
+        <label class="form-label">完成验证码</label>
         <div class="cf-turnstile" data-sitekey="{{ recaptcha_site_key }}"></div>
       </div>
 
       <div class="col-12">
-        <button type="submit" class="btn btn-blue btn-lg" id="submit-button" disabled=True>注册</button>
+        <button type="submit" class="btn btn-blue btn-lg" id="submit-button">注册</button>
       </div>
     </form>
 
@@ -86,27 +110,19 @@
 
 {% block script %}
 <script>
-  $(document).ready(function () {
-    $('#reginput-email').focus();
+$(document).ready(function() {
+  $('#reginput-email').focus();
 
-    var form = document.querySelector('form');
-    form.addEventListener('submit', function (event) {
-      if (!form.checkValidity()) {
-        event.preventDefault();
-        event.stopPropagation();
-      }
-      form.classList.add('was-validated');
-    }, false);
+  var form = document.querySelector('form');
+  form.addEventListener('submit', function(event) {
+    if (!form.checkValidity()) {
+      event.preventDefault();
+      event.stopPropagation();
+    }
+    form.classList.add('was-validated');
+  }, false);
 
-  // Function to check the overall validity and toggle the submit button
-  function toggleSubmitButton() {
-    var usernameValid = !$('#reginput-username').hasClass('is-invalid') && $('#reginput-username').val().length > 0;
-    var passwordsMatch = $('#reginput-password').val() === $('#reginput-confirm-password').val();
-
-    $('#submit-button').prop('disabled', !(usernameValid && passwordsMatch));
-  }
-
-  // Username validation with button control
+  // 实时验证用户名
   $('#reginput-username').on('input', function() {
     var username = $(this).val();
     if (username.length > 0) {
@@ -119,67 +135,48 @@
         },
         success: function(response) {
           if (response === 'OK') {
-            $('#usernameFeedback').hide();
-            $('#reginput-username').removeClass('is-invalid');
-            $('#reginput-username').addClass('is-valid')
+            $('#reginput-username').removeClass('is-invalid').addClass('is-valid');
           } else {
-            $('#usernameFeedback').show();
-            $('#reginput-username').removeClass('is-valid');
-            $('#reginput-username').addClass('is-invalid');
+            $('#reginput-username').removeClass('is-valid').addClass('is-invalid');
           }
-          toggleSubmitButton();
         }
       });
     } else {
-      $('#reginput-username').removeClass('is-valid');
-      $('#reginput-username').addClass('is-invalid');
-      toggleSubmitButton();
+      $(this).removeClass('is-valid').addClass('is-invalid');
     }
   });
 
-    // Email format validation
-  $('#reginput-email').on('input', function() {
-    if (this.validity.typeMismatch || this.validity.patternMismatch) {
-      $('#emailFeedback').show();
-      $(this).removeClass('is-valid');
-      $(this).addClass('is-invalid');
-    } else {
-      $('#emailFeedback').hide();
-      $(this).removeClass('is-invalid');
-      $(this).addClass('is-valid');
-    }
-  });
-
-  // Password length validation
-  $('#reginput-password').on('input', function() {
-    if (this.validity.tooShort) {
-      $('#passwordLengthFeedback').show();
-      $(this).removeClass('is-valid');
-      $(this).addClass('is-invalid');
-    } else {
-      $('#passwordLengthFeedback').hide();
-      $(this).removeClass('is-invalid');
-      $(this).addClass('is-valid');
-    }
-    toggleSubmitButton(); // Assuming you have the toggleSubmitButton function
-  });
-
-  // Password match validation
-  $('#reginput-confirm-password, #reginput-password').on('input', function() {
+  // 实时验证密码匹配
+  $('#reginput-password, #reginput-confirm-password').on('input', function() {
     var password = $('#reginput-password').val();
     var confirmPassword = $('#reginput-confirm-password').val();
 
-    if (password !== confirmPassword) {
-      $('#confirmPasswordFeedback').show();
-      $('#reginput-confirm-password').removeClass('is-valid')
-      $('#reginput-confirm-password').addClass('is-invalid');
+    if (password.length < 8) {
+      $('#reginput-password').removeClass('is-valid').addClass('is-invalid');
     } else {
-      $('#confirmPasswordFeedback').hide();
-      $('#reginput-confirm-password').removeClass('is-invalid');
-      $('#reginput-confirm-password').addClass('is-valid');
+      $('#reginput-password').removeClass('is-invalid').addClass('is-valid');
     }
-    toggleSubmitButton();
+
+    if (confirmPassword.length > 0) {
+      if (password === confirmPassword) {
+        $('#reginput-confirm-password').removeClass('is-invalid').addClass('is-valid');
+      } else {
+        $('#reginput-confirm-password').removeClass('is-valid').addClass('is-invalid');
+      }
+    }
   });
+
+  // 实时验证邮箱格式
+  $('#reginput-email').on('input', function() {
+    var email = $(this).val();
+    var emailRegex = /^[a-z0-9._%+-]+@(connect\.)?hkust-gz\.edu\.cn$/;
+    
+    if (emailRegex.test(email)) {
+      $(this).removeClass('is-invalid').addClass('is-valid');
+    } else {
+      $(this).removeClass('is-valid').addClass('is-invalid');
+    }
   });
+});
 </script>
 {% endblock %}

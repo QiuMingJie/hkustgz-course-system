@@ -35,7 +35,7 @@ def date_to_xmlschema(date):
 app.jinja_env.filters['date_to_xmlschema'] = date_to_xmlschema
 
 # 复制 default.py 为 myconf.py
-app.config.from_object('config.sustech')
+app.config.from_object('config.default')
 os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "1"  # 允许使用HTTP进行OAuth
 
 toolbar = DebugToolbarExtension(app)
@@ -103,6 +103,8 @@ def page_not_found(e):
 
 
 from app.views import *
+from app.views.ai import bp as ai
+
 app.register_blueprint(home,url_prefix='')
 app.register_blueprint(course,url_prefix='/course')
 app.register_blueprint(review, url_prefix='/review')
@@ -111,3 +113,4 @@ app.register_blueprint(user, url_prefix='/user')
 app.register_blueprint(teacher, url_prefix='/teacher')
 app.register_blueprint(admin, url_prefix='/admin')
 app.register_blueprint(stats, url_prefix='/stats')
+app.register_blueprint(ai, url_prefix='/ai')

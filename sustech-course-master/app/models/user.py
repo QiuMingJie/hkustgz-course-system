@@ -266,8 +266,8 @@ class User(db.Model, UserMixin):
 
     @classmethod
     def authenticate_email(cls, email, password):
-        expanded_email_student = email + '@mail.sustech.edu.cn'
-        expanded_email_teacher = email + '@sustech.edu.cn'
+        expanded_email_student = email + '@connect.hkust-gz.edu.cn'
+        expanded_email_teacher = email + '@hkust-gz.edu.cn'
         user = cls.query.filter(db.or_(User.email == email,
                                        User.email == expanded_email_student,
                                        User.email == expanded_email_teacher)).first()

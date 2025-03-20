@@ -1,0 +1,219 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="container mt-4">
+  <div class="row">
+    <!-- 左侧会话列表 -->
+    <div class="col-md-3">
+      <div class="card shadow-sm">
+        <div class="card-body">
+          <div class="d-grid gap-2">
+            <button class="btn btn-primary" onclick="newChat()">
+              <i class="fa-solid fa-plus"></i> 新建会话
+            </button>
+          </div>
+          <hr>
+          <div class="chat-history" id="chatHistory">
+            <!-- 会话历史将通过JavaScript动态添加 -->
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- 右侧聊天区域 -->
+    <div class="col-md-9">
+      <div class="card shadow-sm">
+        <div class="card-body">
+          <div class="chat-container" id="chatContainer" style="height: 70vh; overflow-y: auto;">
+            <!-- 欢迎消息 -->
+            <div class="chat-message system-message">
+              <div class="message-content">
+                <p>👋 你好！我是港科广AI助手，我可以：</p>
+                <ul>
+                  <li>回答课程相关问题</li>
+                  <li>提供学习建议和规划</li>
+                  <li>解答专业知识疑惑</li>
+                  <li>协助论文写作和研究</li>
+                </ul>
+                <p>有什么我可以帮你的吗？</p>
+              </div>
+            </div>
+            <!-- 聊天消息将通过JavaScript动态添加 -->
+          </div>
+          
+          <!-- 输入区域 -->
+          <div class="chat-input-area mt-3">
+            <form id="chatForm" class="d-flex gap-2">
+              <textarea 
+                class="form-control" 
+                id="userInput" 
+                rows="2" 
+                placeholder="输入你的问题..."
+                style="resize: none;"
+              ></textarea>
+              <button type="submit" class="btn btn-primary d-flex align-items-center">
+                <i class="fa-solid fa-paper-plane"></i>
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+.chat-message {
+  margin-bottom: 1rem;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  max-width: 85%;
+}
+
+.user-message {
+  background-color: var(--bs-primary);
+  color: white;
+  margin-left: auto;
+}
+
+.ai-message {
+  background-color: var(--bs-light);
+  margin-right: auto;
+}
+
+.system-message {
+  background-color: var(--bs-light);
+  margin-right: auto;
+  border-left: 4px solid var(--bs-primary);
+}
+
+.message-content {
+  white-space: pre-wrap;
+}
+
+.chat-history-item {
+  padding: 0.5rem;
+  margin-bottom: 0.5rem;
+  border-radius: 0.25rem;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.chat-history-item:hover {
+  background-color: var(--bs-light);
+}
+
+.chat-history-item.active {
+  background-color: var(--bs-primary);
+  color: white;
+}
+</style>
+{% endblock %}
+
+{% block script %}
+<script>
+let currentChatId = null;
+
+// 初始化
+document.addEventListener('DOMContentLoaded', function() {
+  loadChatHistory();
+  setupEventListeners();
+});
+
+function setupEventListeners() {
+  // 处理聊天表单提交
+  document.getElementById('chatForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const input = document.getElementById('userInput');
+    const message = input.value.trim();
+    
+    if (message) {
+      sendMessage(message);
+      input.value = '';
+    }
+  });
+
+  // 处理输入框快捷键
+  document.getElementById('userInput').addEventListener('keydown', function(e) {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      document.getElementById('chatForm').dispatchEvent(new Event('submit'));
+    }
+  });
+}
+
+function newChat() {
+  currentChatId = Date.now().toString();
+  clearChat();
+  updateChatHistory();
+}
+
+function clearChat() {
+  const container = document.getElementById('chatContainer');
+  container.innerHTML = `
+    <div class="chat-message system-message">
+      <div class="message-content">
+        <p>👋 你好！我是港科广AI助手，我可以：</p>
+        <ul>
+          <li>回答课程相关问题</li>
+          <li>提供学习建议和规划</li>
+          <li>解答专业知识疑惑</li>
+          <li>协助论文写作和研究</li>
+        </ul>
+        <p>有什么我可以帮你的吗？</p>
+      </div>
+    </div>
+  `;
+}
+
+function loadChatHistory() {
+  // 这里可以从localStorage或后端API加载聊天历史
+  const history = document.getElementById('chatHistory');
+  history.innerHTML = ''; // 清空现有历史
+}
+
+function updateChatHistory() {
+  // 更新左侧会话列表
+  const history = document.getElementById('chatHistory');
+  const newItem = document.createElement('div');
+  newItem.className = 'chat-history-item active';
+  newItem.textContent = `会话 ${new Date().toLocaleTimeString()}`;
+  newItem.onclick = () => loadChat(currentChatId);
+  
+  // 移除其他项目的active类
+  history.querySelectorAll('.chat-history-item').forEach(item => {
+    item.classList.remove('active');
+  });
+  
+  history.insertBefore(newItem, history.firstChild);
+}
+
+function loadChat(chatId) {
+  currentChatId = chatId;
+  // 这里可以从localStorage或后端API加载特定会话的聊天记录
+}
+
+function sendMessage(message) {
+  // 添加用户消息
+  addMessage(message, 'user');
+  
+  // 模拟AI响应
+  setTimeout(() => {
+    // 这里应该调用后端API获取AI响应
+    const aiResponse = "这是一个模拟的AI响应。在实际实现中，这里应该调用后端API来获取真实的AI响应。";
+    addMessage(aiResponse, 'ai');
+  }, 1000);
+}
+
+function addMessage(message, type) {
+  const container = document.getElementById('chatContainer');
+  const messageDiv = document.createElement('div');
+  messageDiv.className = `chat-message ${type}-message`;
+  messageDiv.innerHTML = `
+    <div class="message-content">${message}</div>
+  `;
+  container.appendChild(messageDiv);
+  container.scrollTop = container.scrollHeight;
+}
+</script>
+{% endblock %} 

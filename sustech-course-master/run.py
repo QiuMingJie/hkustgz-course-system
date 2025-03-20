@@ -12,7 +12,8 @@ for arg in sys.argv:
 
 def start():
     if debug:
-        db.create_all()
+        with app.app_context():
+            db.create_all()
         app.run(port=2021, threaded=True, host='0.0.0.0')
     else:
         app.run(port=3000, threaded=True)
@@ -20,4 +21,4 @@ def start():
 
 
 if __name__ == '__main__':
-    start()
+    app.run(host='127.0.0.1', port=2021, debug='-d' in __import__('sys').argv)

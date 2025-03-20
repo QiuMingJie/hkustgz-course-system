@@ -191,13 +191,22 @@ def oauth_callback():
         username = fake.name().replace(" ", "_")
         user = User(username=username, email=email, password=str(uuid.uuid4().hex)) # random password
         email_suffix = email.split('@')[-1]
-        if email_suffix == 'mail.sustech.edu.cn':
-            user.identity = 'Student'
-        elif email_suffix == 'sustech.edu.cn':
-            user.identity = 'Teacher'
+        email_prefix = email.split('@')[0]
+        # if prefix does not contain "list-"
+        if email_prefix.find("list-") == -1:
+            if email_suffix == 'connect.hkust-gz.edu.cn':
+                user.identity = 'Student'
+            elif email_suffix == 'hkust-gz.edu.cn':
+                user.identity = 'Teacher'
+            ok,message = user.bind_teacher(email)
+            #TODO: deal with bind feedback
+        else:
+            abort(403, "必须使用港科广学生或教师邮箱注册")
+        send_confirm_mail(user.email)
         user.save()
-        user.confirm()
-        login_user(user)
+        #login_user(user)
+        '''注册完毕后显示一个需要激活的页面'''
+        return render_template('feedback.html', status=True, message=_('我们已经向您发送了激活邮件，请在邮箱中点击激活链接。如果您没有收到邮件，有可能是在垃圾箱中。'), title='注册')
     else:
         # print("found existed user!")
         user = User.query.filter_by(email=email).first_or_404()
@@ -296,14 +305,14 @@ def signup():
             email_prefix = email.split('@')[0]
             # if prefix does not contain "list-"
             if email_prefix.find("list-") == -1:
-                if email_suffix == 'mail.sustech.edu.cn':
+                if email_suffix == 'connect.hkust-gz.edu.cn':
                     user.identity = 'Student'
-                elif email_suffix == 'sustech.edu.cn':
+                elif email_suffix == 'hkust-gz.edu.cn':
                     user.identity = 'Teacher'
                 ok,message = user.bind_teacher(email)
                 #TODO: deal with bind feedback
             else:
-                abort(403, "必须使用科大学生或教师邮箱注册")
+                abort(403, "必须使用港科广学生或教师邮箱注册")
             send_confirm_mail(user.email)
             user.save()
             #login_user(user)
@@ -322,7 +331,6 @@ def signup():
 @home.route('/confirm-email/')
 def confirm_email():
     if current_user.is_authenticated:
-        #logout_user()
         return redirect(request.args.get('next') or gen_index_url())
     action = request.args.get('action')
     if action == 'confirm':
@@ -363,7 +371,7 @@ def logout():
 def change_password():
     '''在控制面板里发邮件修改密码，另一个修改密码在user.py里面'''
     if not current_user.is_authenticated:
-        return redirect(url_for('home.signin', _external=True, _scheme='https'))
+        return redirect(url_for('home.signin', _external=True, _scheme='http'))
     send_reset_password_mail(current_user.email)
     return render_template('feedback.html', status=True, message=_('密码重置邮件已经发送。'), title='修改密码')
 

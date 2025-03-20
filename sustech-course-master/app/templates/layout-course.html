@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="关于课程 {{ course.name }}{% if course.teachers %}（{{ course.teacher_names_display }}）{% endif %} ({{ course.courseries }}) 的评价 ——南方科技大学牛蛙课程评价社区 Niuwa Curriculum Evaluation System">
+    <meta name="description" content="关于课程 {{ course.name }}{% if course.teachers %}（{{ course.teacher_names_display }}）{% endif %} ({{ course.courseries }}) 的评价 ——南方科技大学牛蛙课程评价社区 HKUST-GZ Curriculum Evaluation System">
     <meta name="keywords" content="{{ course.name }},{{ course.courseries }},SUSTECH,评课,课程">
     <meta name="author" content="">
     <link rel="icon" href="/static/image/favicon.ico">
@@ -46,7 +46,7 @@
         {% else %}
         <button type="button" class="mobile btn btn-primary navbar-btn pull-right right-mg-md" style="outline:none" data-bs-toggle="modal" data-bs-target="#signin" >登录</button>
         {% endif %}
-        <a class="navbar-brand fw-bold" href="{{ url_for('home.index') }}"><i class="fa-solid fa-pencil"></i> Niuwa Curriculum Evaluation System</a>
+        <a class="navbar-brand fw-bold" href="{{ url_for('home.index') }}"><i class="fa-solid fa-pencil"></i> HKUST-GZ Curriculum Evaluation System</a>
       </div>
 
       <!-- Collect the nav links, forms, and other content for toggling -->

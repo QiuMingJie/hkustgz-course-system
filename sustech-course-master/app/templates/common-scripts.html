@@ -9,23 +9,48 @@ $(document).ready(function() {
     $('.review img').addClass('img-fluid');
 
     // 定义一个函数来更新暗色模式
-    function updateDarkMode() {
-        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-            // 如果是暗模式
-            //$('.navbar, .nav, .form-control, .btn, .pagination, .form-check-input, .dropdown, table').attr('data-bs-theme', 'dark');
+    function updateDarkMode(isDark) {
+        if (isDark) {
             $('html').attr('data-bs-theme', 'dark');
+            $('#theme-toggle i').removeClass('bi-moon-fill').addClass('bi-sun-fill');
+            localStorage.setItem('darkMode', 'true');
         } else {
-            // 如果是亮模式或未定义
-            //$('.navbar, .nav, .form-control, .btn, .pagination, .form-check-input, .dropdown, table').attr('data-bs-theme', 'light');
             $('html').attr('data-bs-theme', 'light');
+            $('#theme-toggle i').removeClass('bi-sun-fill').addClass('bi-moon-fill');
+            localStorage.setItem('darkMode', 'false');
         }
     }
 
-    // 初始时调用该函数以设置正确的主题
-    updateDarkMode();
+    // 从localStorage获取主题设置
+    let isDarkMode = localStorage.getItem('darkMode') === 'true';
+    
+    // 如果没有保存的设置，则使用系统主题
+    if (localStorage.getItem('darkMode') === null) {
+        isDarkMode = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+        updateDarkMode(isDarkMode);
+    } else {
+        updateDarkMode(isDarkMode);
+    }
 
-    // 设置监听器以在暗色模式变化时更新
-    window.matchMedia('(prefers-color-scheme: dark)').addListener(updateDarkMode);
+    // 添加主题切换按钮到body，并设置初始图标
+    if (!$('#theme-toggle').length) {
+        $('body').append('<button id="theme-toggle"><i class="bi ' + (isDarkMode ? 'bi-sun-fill' : 'bi-moon-fill') + '"></i></button>');
+    }
+
+    // 设置按钮点击事件
+    $(document).on('click', '#theme-toggle', function() {
+        isDarkMode = !isDarkMode;
+        updateDarkMode(isDarkMode);
+    });
+
+    // 设置监听器以在系统主题变化时更新（仅当用户未手动设置主题时）
+    const darkModeMediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+    darkModeMediaQuery.addListener(function(e) {
+        if (localStorage.getItem('darkMode') === null) {
+            isDarkMode = e.matches;
+            updateDarkMode(isDarkMode);
+        }
+    });
 
     //focus search bar by command + K
     $(document).on('keydown', function (e) {

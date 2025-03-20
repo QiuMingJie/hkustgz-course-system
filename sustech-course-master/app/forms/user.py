@@ -26,7 +26,7 @@ class LoginForm(FlaskForm):
 
 
 class RegisterForm(FlaskForm):
-    username = UsernameField('Username', validators=[DataRequired(), Length(max=30,message='The length must under 30')])
+    username = UsernameField('Username', validators=[DataRequired(), Length(max=50, message='用户名长度不能超过50个字符')])
     email = StringField('Email', validators=[DataRequired(), Email()])
     password = PasswordField('password', validators=[DataRequired(),
         EqualTo('confirm_password', message='passwords must match')])

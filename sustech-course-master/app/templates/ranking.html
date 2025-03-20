@@ -13,12 +13,12 @@
 
     <div class="col-md-offset-1 col-md-10" style="padding: 0;">
       <div class="center top-pd-md">
-        <span class="h3 blue"><strong>评课社区排行榜</strong></span>
+        <span class="h3 blue"><strong>HKUST-GZ课程评价排行榜</strong></span>
         <span>（{{ date }}）</span>
       </div>
 
       <div class="bg-info rl-pd-md top-pd-md ud-mg-lg">
-        <p><strong>温馨提示</strong>：本排行榜仅供参考，如有疑议，欢迎友好交流（service@cra.moe）。<a href="{{ url_for('stats.rankings_history') }}">戳这里看排行榜历史</a></p>
+        <p><strong>温馨提示</strong>：本排行榜仅供参考，如有疑议，欢迎友好交流（course@hkust-gz.edu.cn）。</p>
         <p>
           <strong>什么是归一化平均分？</strong>：一门仅有 1 个 10 分点评的课程很可能不如有 10 个平均 9.9 分点评的课程，因此平均分需要归一化。
           归一化平均分 = (本课程总分 + 全站点评的平均分 * 全站有点评课程的平均点评数) / (本课程点评数 + 全站有点评课程的平均点评数)。
@@ -30,13 +30,13 @@
 
       <div class="bm-pd-sm">
         <div class="bm-pd-sm">
-          <span class="h4"><span class="fa-regular fa-thumbs-up"></span> 最受欢迎的老师</span>
+          <span class="h4"><span class="fa-regular fa-thumbs-up"></span> 最受欢迎的教授</span>
         </div>
         <p>排名规则：至少有 3 门课程评分大于 9 分，且没有课程评分小于 8 分，然后按归一化平均分排序。</p>
         <table class="table table-bordered text-center table-hover min-margin-table">
           <tr>
             <th class="text-center">TOP</th>
-            <th class="text-center">老师</th>
+            <th class="text-center">教授</th>
             <th class="text-center desktop">学院</th>
             <th class="text-center">课程数</th>
             <th class="text-center">点评数</th>
