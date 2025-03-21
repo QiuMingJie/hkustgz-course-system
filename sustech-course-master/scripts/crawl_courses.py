@@ -92,7 +92,14 @@ def get_courses_from_subject(url):
                 # 获取课程描述
                 desc_div = course_div.find('div', class_='courseinfo')
                 if desc_div:
-                    current_course['description'] = desc_div.text.strip()
+                    # 找到包含 DESCRIPTION 的表格行
+                    desc_table = desc_div.find('table')
+                    if desc_table:
+                        for row in desc_table.find_all('tr'):
+                            cols = row.find_all(['th', 'td'])
+                            if len(cols) >= 2 and cols[0].text.strip().upper() == 'DESCRIPTION':
+                                current_course['description'] = cols[1].text.strip()
+                                break
                 
                 # 获取教师信息
                 instructors = []
