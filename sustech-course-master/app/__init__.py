@@ -14,6 +14,7 @@ from flask_babel import Babel
 from datetime import datetime
 from flask_debugtoolbar import DebugToolbarExtension
 from flask_minify import minify
+from flask_migrate import Migrate
 import json
 
 app = Flask(__name__)
@@ -35,12 +36,13 @@ def date_to_xmlschema(date):
 app.jinja_env.filters['date_to_xmlschema'] = date_to_xmlschema
 
 # 复制 default.py 为 myconf.py
-app.config.from_object('config.default')
+app.config.from_object('app.config.default')
 os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "1"  # 允许使用HTTP进行OAuth
 
 toolbar = DebugToolbarExtension(app)
 
 db = SQLAlchemy(app)
+migrate = Migrate(app, db)
 app.csrf = CSRFProtect(app)
 login_manager = LoginManager()
 login_manager.init_app(app)

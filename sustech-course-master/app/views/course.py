@@ -62,17 +62,32 @@ deptlist = [
 ]
 
 course_type_dict = {
-    'public': ['公选课','人文类','任选','国际化人才培养','社科类','艺术类'],
-    'general': ['公共课（英语，思政）', '通识必修课'],
-    'general-sci': ['通识基础课', '通识理工基础课', '通识选修课'],
-    'major': ['专业课','专业基础课','专业必修课','专业选修课','专业核心课','专业课'],
-    'practice-and-graduate':['实践与毕业论文','实践','毕业设计/论文'],
-    # 'graduate': ['研究生课程', '专业硕士', '研究生课'],
-    # 'english': ['英语拓展', '英语拓展课程'],
-    # 'physical': ['体育选项'],
-    # 'dual-degree': ['双学位课程', '双学位'],
-    # 'mooc': ['慕课', '慕课通识'],
-    }
+    'ucug': ['UCUG', '通识教育课程'],
+    'ucmp': ['UCMP', '通识教育课程'],
+    'ufug': ['UFUG', '通识教育课程'],
+    'aiaa': ['AIAA', '人工智能与自动化'],
+    'dsaa': ['DSAA', '数据科学与分析'],
+    'smmg': ['SMMG', '智能制造'],
+    'amat': ['AMAT', '先进材料'],
+    'bsbe': ['BSBE', '生物科学与生物医学工程'],
+    'cmaa': ['CMAA', '计算媒体与艺术'],
+    'eoas': ['EOAS', '地球与海洋大气科学'],
+    'ftec': ['FTEC', '金融科技'],
+    'funh': ['FUNH', '功能枢纽'],
+    'infh': ['INFH', '信息枢纽'],
+    'intr': ['INTR', '跨学科研究'],
+    'iota': ['IOTA', '物联网'],
+    'ipen': ['IPEN', '智能电力与能源网络'],
+    'lang': ['LANG', '语言教育'],
+    'mics': ['MICS', '微电子'],
+    'pdev': ['PDEV', '专业发展'],
+    'pled': ['PLED', '公共领导力'],
+    'roas': ['ROAS', '机器人'],
+    'seen': ['SEEN', '可持续能源与环境'],
+    'soch': ['SOCH', '社会枢纽'],
+    'sysh': ['SYSH', '系统枢纽'],
+    'ugod': ['UGOD', '本科生办公室']
+}
 
 
 @course.route('/')
@@ -85,7 +100,13 @@ def index():
 
     # 课程类型
     if course_type in course_type_dict.keys():
-        course_query = Course.query.distinct().join(CourseTerm).filter(or_(CourseTerm.course_type.in_(course_type_dict[course_type]), CourseTerm.join_type.in_(course_type_dict[course_type])))
+        # 修改查询逻辑，先获取符合条件的课程ID
+        course_ids = db.session.query(Course.id).join(CourseTerm).filter(
+            or_(CourseTerm.course_type.in_(course_type_dict[course_type]), 
+                CourseTerm.join_type.in_(course_type_dict[course_type]))
+        ).distinct().all()
+        course_ids = [id[0] for id in course_ids]
+        course_query = Course.query.filter(Course.id.in_(course_ids))
 
     # 排序方式
     if sort_by == 'popular':

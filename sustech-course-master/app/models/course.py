@@ -158,7 +158,7 @@ class Course(db.Model):
     __tablename__ = 'courses'
 
     id = db.Column(db.Integer,unique=True,primary_key=True)
-    name = db.Column(db.String(80), index=True) # 课程名称
+    name = db.Column(db.String(200), index=True) # 课程名称
     dept_id = db.Column(db.Integer, db.ForeignKey('depts.id'))
 
     course_code = db.Column(db.String(80), index=True) #CS102A
