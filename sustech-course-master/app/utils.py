@@ -46,7 +46,7 @@ def send_confirm_mail(email):
     mail.send(msg)
 
 def send_reset_password_mail(email):
-    subject = '[HKCES评课系统] 重置您的密码'
+    subject = '[HKUST-GZ评课系统] 重置您的密码'
     token = ts.dumps(email, salt=app.config['PASSWORD_RESET_SECRET_KEY'])
 
     reset_url = url_for(
