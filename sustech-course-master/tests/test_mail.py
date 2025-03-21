@@ -10,7 +10,7 @@ def test_mail():
     with app.app_context():
         try:
             msg = Message('测试邮件 - HKUST-GZ Course Evaluation System',
-                        recipients=['Aurorra1123@gmail.com'])
+                        recipients=['Aurorra1123@outlook.com'])
             msg.body = '这是一封测试邮件，用于验证邮件服务器配置是否正确。'
             mail.send(msg)
             print('邮件发送成功！')
