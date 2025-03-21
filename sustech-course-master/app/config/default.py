@@ -24,14 +24,14 @@ SQLALCHEMY_DATABASE_URI = 'mysql+mysqldb://root:@localhost/icourse?charset=utf8m
 SQLALCHEMY_TRACK_MODIFICATIONS = False
 
 # Flask mail
-MAIL_SERVER = 'smtp.gmail.com'
-MAIL_PORT = 587
+MAIL_SERVER = 'smtp.gmail.com'  # Gmail的SMTP服务器
+MAIL_PORT = 587  # Gmail的SMTP端口
 MAIL_USE_TLS = True
 MAIL_USE_SSL = False
 MAIL_DEBUG = DEBUG
-MAIL_USERNAME = 'your-email@gmail.com'
-MAIL_PASSWORD = 'your-password'
-MAIL_DEFAULT_SENDER = 'support@icourse.club'
+MAIL_USERNAME = 'Aurorra1123@gmail.com'  # Gmail邮箱地址
+MAIL_PASSWORD = 'ttohdbiecgbajtrr'  # Gmail应用专用密码
+MAIL_DEFAULT_SENDER = 'HKUST-GZ Course Evaluation System <Aurorra1123@gmail.com>'  # 发件人名称和邮箱
 MAIL_MAX_EMAILS = None
 # MAIL_SUPPRESS_SEND =
 MAIL_ASCII_ATTACHMENTS = False

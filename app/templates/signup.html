@@ -1,0 +1,41 @@
+<form class="row g-3" method="post" action="{{ url_for('home.signup') }}" novalidate>
+    <input hidden name="csrf_token" value="{{ csrf_token() }}">
+
+    <div class="col-md-6">
+        <label for="reginput-username" class="form-label">用户名</label>
+        <input type="text" class="form-control" id="reginput-username" name="username" required>
+        <div class="invalid-feedback">
+            请输入用户名
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <label for="reginput-email" class="form-label">港科广邮箱（学生使用@connect.hkust-gz.edu.cn，教师使用@hkust-gz.edu.cn）</label>
+        <input type="email" class="form-control" id="reginput-email" name="email" 
+               placeholder="student@connect.hkust-gz.edu.cn or teacher@hkust-gz.edu.cn" 
+               required pattern="[a-z0-9._%+-]+@(connect\.)?hkust-gz\.edu\.cn$">
+        <div class="invalid-feedback">
+            请输入有效的港科广邮箱地址
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <label for="reginput-password" class="form-label">密码</label>
+        <input type="password" class="form-control" id="reginput-password" name="password" required minlength="8">
+        <div class="invalid-feedback">
+            密码长度至少8位
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <label for="reginput-confirm-password" class="form-label">确认密码</label>
+        <input type="password" class="form-control" id="reginput-confirm-password" name="confirm_password" required>
+        <div class="invalid-feedback">
+            两次输入的密码不一致
+        </div>
+    </div>
+
+    <div class="col-12">
+        <button type="submit" class="btn btn-primary">注册</button>
+    </div>
+</form> 

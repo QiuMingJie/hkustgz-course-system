@@ -21,35 +21,20 @@ $(document).ready(function() {
         }
     }
 
-    // 从localStorage获取主题设置
-    let isDarkMode = localStorage.getItem('darkMode') === 'true';
-    
-    // 如果没有保存的设置，则使用系统主题
-    if (localStorage.getItem('darkMode') === null) {
-        isDarkMode = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-        updateDarkMode(isDarkMode);
-    } else {
-        updateDarkMode(isDarkMode);
-    }
+    // 强制使用白天模式
+    localStorage.setItem('darkMode', 'false');
+    let isDarkMode = false;
+    updateDarkMode(isDarkMode);
 
     // 添加主题切换按钮到body，并设置初始图标
     if (!$('#theme-toggle').length) {
-        $('body').append('<button id="theme-toggle"><i class="bi ' + (isDarkMode ? 'bi-sun-fill' : 'bi-moon-fill') + '"></i></button>');
+        $('body').append('<button id="theme-toggle"><i class="bi bi-moon-fill"></i></button>');
     }
 
     // 设置按钮点击事件
     $(document).on('click', '#theme-toggle', function() {
         isDarkMode = !isDarkMode;
         updateDarkMode(isDarkMode);
-    });
-
-    // 设置监听器以在系统主题变化时更新（仅当用户未手动设置主题时）
-    const darkModeMediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
-    darkModeMediaQuery.addListener(function(e) {
-        if (localStorage.getItem('darkMode') === null) {
-            isDarkMode = e.matches;
-            updateDarkMode(isDarkMode);
-        }
     });
 
     //focus search bar by command + K

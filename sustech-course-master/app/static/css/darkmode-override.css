@@ -1,105 +1,49 @@
 /*darkmode override*/
 
-@media (prefers-color-scheme: dark) {
-    :root {
-        --bs-body-bg: #212529;
-    }
-    /*.text-muted {*/
-    /*    color: #b4b4b4; !* 暗模式下的静音文本颜色，使用 !important 覆盖 Bootstrap 的样式 *!*/
-    /*}*/
-    body {
-        background-color: #121212; /* 暗色模式下的背景色 */
-        color: #e0e0e0; /* 暗色模式下的默认文字颜色 */
-    }
+[data-bs-theme="dark"] {
+    --bs-body-bg: #212529;
+}
 
-    .float-element { background-color: var(--bs-body-bg); }
-    .dashed { border-bottom: 1px #444 dashed; }
-    .solid { border-bottom: 1px #444 solid; }
-    /*.hr-box { border-bottom: 1px #444 solid; }*/
+[data-bs-theme="dark"] body {
+    background-color: #121212;
+    color: #e0e0e0;
+}
 
-    .blue { color: #699fcf; }
-    .grey { color: #aaa; }
-    .dark-grey { color: #888; }
-    a { color: #699fcf; }
-    a:hover, a:focus { filter: brightness(120%); }
+[data-bs-theme="dark"] .float-element { background-color: var(--bs-body-bg); }
+[data-bs-theme="dark"] .dashed { border-bottom: 1px #444 dashed; }
+[data-bs-theme="dark"] .solid { border-bottom: 1px #444 solid; }
 
-    /*.shadow { box-shadow: 3px 3px 2px #222; }*/
+[data-bs-theme="dark"] .blue { color: #699fcf; }
+[data-bs-theme="dark"] .grey { color: #aaa; }
+[data-bs-theme="dark"] .dark-grey { color: #888; }
+[data-bs-theme="dark"] a { color: #699fcf; }
+[data-bs-theme="dark"] a:hover, 
+[data-bs-theme="dark"] a:focus { filter: brightness(120%); }
 
-    /*.tips {*/
-    /*    border: 1px #444 dashed;*/
-    /*    background: var(--bs-body-bg);*/
-    /*    color: #ccc;*/
-    /*}*/
-    .status-message { color: #ccc; }
+[data-bs-theme="dark"] .status-message { color: #ccc; }
 
+[data-bs-theme="dark"] .navbar-brand { color: #699fcf; }
 
-    /*blockquote {*/
-    /*    border-left: 2px solid #699fcf;*/
-    /*    background: var(--bs-body-bg);*/
-    /*}*/
-    /*blockquote::before { color: #699fcf; }*/
+[data-bs-theme="dark"] .navbar {
+    background-color: var(--bs-body-bg);
+    color: #ddd;
+}
 
-    /* 调整表格样式 */
+[data-bs-theme="dark"] .select-box a {
+    color: #ddd;
+}
 
+[data-bs-theme="dark"] .btn-white {
+    background-color: var(--bs-body-bg);
+}
 
+[data-bs-theme="dark"] .btn-grey {
+    color: #ddd;
+    background-color: var(--bs-body-bg);
+    border: 1px #3f3f3f solid;
+}
 
-    /* Navbar调整 */
-    .navbar-brand { color: #699fcf; }
-
-    /* 其他可能需要调整的元素... */
-        /* 调整卡片组件 */
-    /*.card {*/
-    /*    background-color: #242424;*/
-    /*    color: #ddd;*/
-    /*}*/
-
-    /* 调整下拉菜单 */
-    /*.dropdown-menu {*/
-    /*    background-color: #333;*/
-    /*    color: #ddd;*/
-    /*}*/
-
-    /* 调整模态框 */
-    /*.modal-content {*/
-    /*    background-color: #242424;*/
-    /*    color: #ddd;*/
-    /*}*/
-
-    /* 调整表单输入 */
-    /*.form-control {*/
-    /*    background-color: #333;*/
-    /*    border: 1px solid #444;*/
-    /*    color: #ddd;*/
-    /*}*/
-
-    /* 调整导航栏 */
-    .navbar {
-        background-color: var(--bs-body-bg);
-        color: #ddd;
-    }
-
-    /*课程列表的文字颜色*/
-    .select-box a {
-        color: #ddd;
-    }
-
-
-
-    /*按钮*/
-    .btn-white {
-        background-color: var(--bs-body-bg);
-    }
-    .btn-grey {
-        color: #ddd;
-        background-color: var(--bs-body-bg);
-        border: 1px #3f3f3f solid;
-    }
-
-    /* 黑白 badge */
-    .badge-black-white {
-        background-color: #343a40;
-        color: #699fcf;
-    }
-
-
+[data-bs-theme="dark"] .badge-black-white {
+    background-color: #343a40;
+    color: #699fcf;
 }

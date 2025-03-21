@@ -2,65 +2,59 @@
 
 <body>
   <div id="wrap">
-    <nav class="navbar navbar-expand-lg shadow">
+    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
       <div class="container">
         <a class="navbar-brand fw-bold desktop" href="{{ url_for('home.index') }}">
-          <img src="static/image/footer_logo_colorful.png" alt="HKUST-GZ logo" style="height: 30px; margin-right: 10px;"> HKUST-GZ Course Evaluation System
+          <img src="{{ url_for('static', filename='image/footer_logo_colorful.png') }}" alt="HKUST-GZ logo" style="height: 35px; margin-right: 12px;"> HKUST-GZ Course Evaluation
         </a>
         <a class="navbar-brand fw-bold mobile" href="{{ url_for('home.index') }}">
-          <img src="static/image/footer_logo_colorful.png" alt="HKUST-GZ logo" style="height: 25px; margin-right: 5px;"> HKUST-GZ
+          <img src="{{ url_for('static', filename='image/footer_logo_colorful.png') }}" alt="HKUST-GZ logo" style="height: 30px; margin-right: 8px;"> HKUST-GZ
         </a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
+        <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
 
         <div id="navbar" class="collapse navbar-collapse">
           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
             <li class="nav-item">
-              <a class="nav-link {% if this_module and (this_module=='home.latest_reviews' or this_module=='home.search_reviews') %}active{% endif %}" href="{{ url_for('home.latest_reviews') }}">点评</a>
+              <a class="nav-link px-3 {% if this_module and (this_module=='home.latest_reviews' or this_module=='home.search_reviews') %}active fw-bold{% endif %}" href="{{ url_for('home.latest_reviews') }}">点评</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link {% if this_module and (this_module=='course.index' or this_module=='home.search') %}active{% endif %}" href="{{ url_for('course.index') }}">课程</a>
+              <a class="nav-link px-3 {% if this_module and (this_module=='course.index' or this_module=='home.search') %}active fw-bold{% endif %}" href="{{ url_for('course.index') }}">课程</a>
             </li>
             {% if current_user.is_authenticated %}
             <li class="nav-item">
-              <a class="nav-link {% if this_module and this_module=='home.follow_reviews' %}active{% endif %}" href="{{ url_for('home.follow_reviews') }}">关注</a>
+              <a class="nav-link px-3 {% if this_module and this_module=='home.follow_reviews' %}active fw-bold{% endif %}" href="{{ url_for('home.follow_reviews') }}">关注</a>
             </li>
             {% endif %}
             <li class="nav-item">
-              <a class="nav-link" href="https://ug-prog-crs.hkust-gz.edu.cn/#/introduce/detail?id=Artificial%20Intelligence" target="_blank">培养方案</a>
+              <a class="nav-link px-3" href="https://ug-prog-crs.hkust-gz.edu.cn/#/introduce/detail?id=Artificial%20Intelligence" target="_blank">培养方案</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link {% if this_module and this_module=='ai.chat' %}active{% endif %}" href="{{ url_for('ai.chat') }}">
+              <a class="nav-link px-3 {% if this_module and this_module=='ai.chat' %}active fw-bold{% endif %}" href="{{ url_for('ai.chat') }}">
                 <i class="fa-solid fa-robot"></i> AI助手
               </a>
             </li>
-          <!--
-            <li class="nav-item">
-              <a class="nav-link" href="https://nces.cra.moe/community-rules/" target="_blank">社区规范</a>
-            </li>
-            -->
           </ul>
 
-          <form class="d-flex mx-2" style="max-width: 400px;" action="{{ url_for('home.search_reviews_meilisearch_api_html') if this_module == 'home.search_reviews' else url_for('home.search') }}" method="get" role="search">
+          <form class="d-flex mx-3" style="max-width: 450px;" action="{{ url_for('home.search_reviews_meilisearch_api_html') if this_module == 'home.search_reviews' else url_for('home.search') }}" method="get" role="search">
             <div class="input-group w-100">
-              <input type="text" name="q" class="form-control" placeholder="搜索课程、老师、点评" aria-label="Search" value="{{ keyword or '' }}">
-              <button type="submit" class="btn btn-secondary" id="search-button">
+              <input type="text" name="q" class="form-control border-end-0" placeholder="搜索课程、老师、点评" aria-label="Search" value="{{ keyword or '' }}">
+              <button type="submit" class="btn btn-primary border-start-0" id="search-button">
                 <i class="fa fa-search"></i>
               </button>
             </div>
           </form>
 
           {% if current_user.is_authenticated %}
-
-        <div id="dropdown-notice" class="dropdown"> <!-- Changed to a <div> and added dropdown class -->
-              <a class="nav-link dropdown-toggle mt-2 mt-lg-0" href="#" id="notificationDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                  <i class="fa-solid fa-envelope"></i>
-                  {% if current_user.unread_notification_count > 0 %}
-                  <span > {{ current_user.unread_notification_count }}</span>
-                  {% endif %}
-              </a>
-            <ul class="dropdown-menu dropdown-menu-end shadow-sm" aria-labelledby="notificationDropdownMenuLink">
+          <div id="dropdown-notice" class="dropdown mx-2">
+            <a class="nav-link dropdown-toggle mt-2 mt-lg-0" href="#" id="notificationDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              <i class="fa-solid fa-bell"></i>
+              {% if current_user.unread_notification_count > 0 %}
+              <span class="badge bg-danger rounded-pill">{{ current_user.unread_notification_count }}</span>
+              {% endif %}
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end shadow-sm border-0" aria-labelledby="notificationDropdownMenuLink">
               {% if current_user.latest_notifications_text|length == 0 %}
               {% set notification_text_list = ["还没有消息哦！"] %}
               {% else %}
@@ -71,18 +65,16 @@
                 <div class="notice">{{ notification_text|safe }}</div>
               </li>
               {% endfor %}
-              <li class="ud-pd-sm float-end"><a class="blue" href="{{ url_for('user.notice')}}">查看全部 <i class="fa-solid fa-ellipsis"></i> </a></li>
+              <li class="ud-pd-sm float-end"><a class="text-primary" href="{{ url_for('user.notice')}}">查看全部 <i class="fa-solid fa-ellipsis"></i></a></li>
             </ul>
-        </div>
-
-
+          </div>
 
           <ul class="navbar-nav">
             <li class="nav-item dropdown">
               <a class="nav-link dropdown-toggle mt-2 mt-lg-0" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                <i class="fa-solid fa-user"></i> {{ current_user.username }}
+                <i class="fa-solid fa-user-circle"></i> {{ current_user.username }}
               </a>
-              <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+              <ul class="dropdown-menu dropdown-menu-end shadow-sm border-0" aria-labelledby="navbarDropdownMenuLink">
                 <li><a class="dropdown-item" href="{{ url_for('user.view_profile', user_id=current_user.id) }}"><i class="fa-solid fa-house"></i> 个人主页</a></li>
                 <li><a class="dropdown-item" href="{{ url_for('user.account_settings') }}"><i class="fa-solid fa-gear"></i> 设置</a></li>
                 <li><hr class="dropdown-divider"></li>
@@ -91,44 +83,55 @@
             </li>
           </ul>
           {% else %}
-          <button type="button" class="btn btn-blue mt-2 mt-lg-0" data-bs-toggle="modal" data-bs-target="#signin"><i class="fa-solid fa-right-to-bracket"></i>登录</button>
+          <button type="button" class="btn btn-primary mt-2 mt-lg-0 px-4" data-bs-toggle="modal" data-bs-target="#signin">
+            <i class="fa-solid fa-right-to-bracket"></i> 登录
+          </button>
           {% endif %}
         </div>
       </div>
     </nav>
 
-
   {% if not current_user.is_authenticated %}
   <div class="modal fade" id="signin" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog modal-signin">
-      <div class="modal-content shadow">
-        <form id="signin-form" class="form-signin">
-          <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
-          <div class="form-signin-heading">
-            <span class="h2">请登录</span>
-            <a class="btn btn-white float-right" href="/signup">注册</a>
-          </div>
-          <div id="signin-alert" role="alert" class="display: none"></div>
-          <label for="inputEmail" class="sr-only">用户名</label>
-          <input type="text" name="username" id="inputEmail" class="form-control" placeholder="用户名或邮箱" required autofocus>
-          <label for="inputPassword" class="sr-only">密码</label>
-          <input type="password" name="password" id="inputPassword" class="form-control" placeholder="密码" required>
-          <div class="checkbox">
-            <label>
-              <input type="checkbox" name="remember" class="form-check-input">记住我
-            </label>
-            <a class="float-right" href="{{ url_for('home.forgot_password') }}">忘记密码</a>
-          </div>
-        <div class="d-grid gap-1">
-            <button type="submit" class="btn btn-blue btn-lg btn-primary">
-                <i class="fa-solid fa-right-to-bracket"></i> 邮箱登录
-            </button>
-            <a class="btn btn-secondary" href="{{ url_for('home.oauth') }}">
-                CRA SSO / SUSTech CAS 登录/注册
-            </a>
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content border-0 shadow">
+        <div class="modal-header border-0 pb-0">
+          <h5 class="modal-title fw-bold">欢迎回来</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
-
-        </form>
+        <div class="modal-body">
+          <form id="signin-form" class="form-signin">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+            <div id="signin-alert" role="alert" class="display: none"></div>
+            <div class="mb-3">
+              <label for="inputEmail" class="form-label">用户名</label>
+              <input type="text" name="username" id="inputEmail" class="form-control" placeholder="用户名或邮箱" required autofocus>
+            </div>
+            <div class="mb-3">
+              <label for="inputPassword" class="form-label">密码</label>
+              <input type="password" name="password" id="inputPassword" class="form-control" placeholder="密码" required>
+            </div>
+            <div class="d-flex justify-content-between align-items-center mb-4">
+              <div class="form-check">
+                <input type="checkbox" name="remember" class="form-check-input" id="rememberMe">
+                <label class="form-check-label" for="rememberMe">记住我</label>
+              </div>
+              <a href="{{ url_for('home.forgot_password') }}" class="text-decoration-none">忘记密码？</a>
+            </div>
+            <div class="d-grid gap-2">
+              <button type="submit" class="btn btn-primary btn-lg">
+                <i class="fa-solid fa-right-to-bracket"></i> 登录
+              </button>
+              <a class="btn btn-outline-secondary" href="{{ url_for('home.oauth') }}">
+                <i class="fa-solid fa-key"></i> CRA SSO / SUSTech CAS 登录
+              </a>
+            </div>
+            <div class="text-center mt-3">
+              <span class="text-muted">还没有账号？</span>
+              <a href="/signup" class="text-decoration-none ms-1">立即注册</a>
+            </div>
+          </form>
+        </div>
       </div>
     </div>
   </div>

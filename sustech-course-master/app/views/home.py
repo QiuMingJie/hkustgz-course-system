@@ -118,11 +118,10 @@ def signin():
                     return redirect(next_url)
             elif status:
                 '''没有确认邮箱的用户'''
-                message = '请点击邮箱里的激活链接。 <a href=%s>重发激活邮件</a>' % url_for('.confirm_email',
+                message = '请点击邮箱里的激活链接。 <a href="%s">重发激活邮件</a>' % url_for('.confirm_email',
                     email=user.email,
                     action='send',
-                    _external=True,
-                    _scheme='https')
+                    _external=True)
                 if request.args.get('ajax'):
                     return jsonify(status=403, msg=message)
                 else:
@@ -134,7 +133,6 @@ def signin():
     elif request.method == 'POST':
         error = '表单验证错误：' + str(form.errors)
 
-    #TODO: log the form errors
     if request.args.get('ajax'):
         return jsonify(status=404, msg=error)
     else:
@@ -262,35 +260,50 @@ def verify_3rdparty_signin():
 
 @home.route('/signup/',methods=['GET','POST'])
 def signup():
-    if request.method == 'GET':
-        return render_template('signup.html')
+    if current_user.is_authenticated:
+        return redirect(request.args.get('next') or gen_index_url())
+    form = RegisterForm()
+    if form.validate_on_submit():
+        # google recaptcha
+        # recaptcha_response = request.form.get('g-recaptcha-response')
+        # recaptcha_challenge_data = {
+        #     'secret': app.config['RECAPTCHA_SECRET_KEY'],
+        #     'response': recaptcha_response
+        # }
+        # recaptcha_challenge_response = requests.post('https://recaptcha.google.cn/recaptcha/api/siteverify', data=recaptcha_challenge_data)
+
+        # cloudflare
+        recaptcha_response = request.form.get('cf-turnstile-response')
+        recaptcha_challenge_data = {
+            'secret': app.config['RECAPTCHA_SECRET_KEY'],
+            'response': recaptcha_response
+        }
+        recaptcha_challenge_response = requests.post('https://challenges.cloudflare.com/turnstile/v0/siteverify',
+                                                     data=recaptcha_challenge_data)
+
+        recaptcha_challenge_result = recaptcha_challenge_response.json()
+
+        if recaptcha_challenge_result['success']:
+            user = User(
+                username=form['username'].data,
+                email=form['email'].data,
+                password=form['password'].data
+            )
+            # 根据邮箱后缀判断用户身份
+            if user.email.endswith('@hkust-gz.edu.cn'):
+                user.is_student = True
+            elif user.email.endswith('@ust.hk'):
+                user.is_teacher = True
+            else:
+                user.is_student = True  # 默认设置为学生
+            db.session.add(user)
+            db.session.commit()
+            send_confirm_mail(user.email)
+            return render_template('feedback.html', status=True, message=_('注册成功！请查收邮件并点击链接激活您的账号。'), title='注册成功')
+        else:
+            return render_template('feedback.html', status=False, message=_('验证码错误，请勿重复提交表单，<a href="/signup/">点此返回注册页面</a>'), title='注册失败')
     
-    # 获取表单数据
-    username = request.form.get('username')
-    email = request.form.get('email','').lower()
-    password = request.form.get('password')
-    
-    # 暂时禁用 Cloudflare Turnstile 验证
-    # recaptcha_response = request.form.get('cf-turnstile-response')
-    # recaptcha_challenge_data = {
-    #     'secret': app.config['RECAPTCHA_SECRET_KEY'],
-    #     'response': recaptcha_response
-    # }
-    # recaptcha_challenge_response = requests.post('https://challenges.cloudflare.com/turnstile/v0/siteverify',
-    #                                              data=recaptcha_challenge_data)
-    # recaptcha_challenge_result = recaptcha_challenge_response.json()
-    # if not recaptcha_challenge_result['success']:
-    #     return render_template('feedback.html', status=False, message=_('验证码错误，请重试。'))
-    
-    user = User(username=username,email=email,password=password)
-    db.session.add(user)
-    db.session.commit()
-    
-    # 直接确认用户
-    user.confirm()
-    
-    login_user(user)
-    return redirect(url_for('home.index'))
+    return render_template('signup.html', form=form, recaptcha_site_key=app.config['RECAPTCHA_SITE_KEY'])
 
 
 @home.route('/confirm-email/')
@@ -318,10 +331,19 @@ def confirm_email():
         return redirect_to_index()
     elif action == 'send':
         email = request.args.get('email')
-        user = User.query.filter_by(email=email).first_or_404()
-        if not user.confirmed:
+        if not email:
+            return render_template('feedback.html', status=False, message=_('邮箱地址不能为空。'))
+        user = User.query.filter_by(email=email).first()
+        if not user:
+            return render_template('feedback.html', status=False, message=_('该邮箱未注册。'))
+        if user.confirmed:
+            return render_template('feedback.html', status=False, message=_('该邮箱已经激活，无需重新发送。'))
+        try:
             send_confirm_mail(email)
-        return render_template('feedback.html', status=True, message=_('邮件已经发送，请查收！'), title='发送验证邮件')
+            return render_template('feedback.html', status=True, message=_('邮件已经发送，请查收！'), title='发送验证邮件')
+        except Exception as e:
+            app.logger.error(f'发送邮件失败: {str(e)}')
+            return render_template('feedback.html', status=False, message=_('发送邮件失败，请稍后重试。'), title='发送验证邮件')
     else:
         abort(404)
 
