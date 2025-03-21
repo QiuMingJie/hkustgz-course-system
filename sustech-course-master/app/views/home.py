@@ -270,15 +270,21 @@ def signup():
     email = request.form.get('email','').lower()
     password = request.form.get('password')
     
+    # 暂时禁用 Cloudflare Turnstile 验证
+    # recaptcha_response = request.form.get('cf-turnstile-response')
+    # recaptcha_challenge_data = {
+    #     'secret': app.config['RECAPTCHA_SECRET_KEY'],
+    #     'response': recaptcha_response
+    # }
+    # recaptcha_challenge_response = requests.post('https://challenges.cloudflare.com/turnstile/v0/siteverify',
+    #                                              data=recaptcha_challenge_data)
+    # recaptcha_challenge_result = recaptcha_challenge_response.json()
+    # if not recaptcha_challenge_result['success']:
+    #     return render_template('feedback.html', status=False, message=_('验证码错误，请重试。'))
+    
     user = User(username=username,email=email,password=password)
     db.session.add(user)
     db.session.commit()
-    
-    # 暂时注释掉邮件发送功能
-    # try:
-    #     send_confirm_mail(user.email)
-    # except:
-    #     pass
     
     # 直接确认用户
     user.confirm()

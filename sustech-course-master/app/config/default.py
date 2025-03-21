@@ -37,7 +37,7 @@ MAIL_MAX_EMAILS = None
 MAIL_ASCII_ATTACHMENTS = False
 
 # Upload config
-UPLOAD_FOLDER = '/srv/ustc-course/uploads'
+UPLOAD_FOLDER = 'uploads'
 # Alowed extentsions for a filetype
 # for example 'image': set(['png', 'jpg', 'jpeg', 'gif'])
 ALLOWED_EXTENSIONS = {
