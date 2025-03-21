@@ -262,70 +262,29 @@ def verify_3rdparty_signin():
 
 @home.route('/signup/',methods=['GET','POST'])
 def signup():
-    if current_user.is_authenticated:
-        return redirect(request.args.get('next') or gen_index_url())
-    form = RegisterForm()
-    if form.validate_on_submit():
-        # google
-        # recaptcha_response = request.form.get('g-recaptcha-response')
-        # recaptcha_challenge_data = {
-        #     'secret': app.config['RECAPTCHA_SECRET_KEY'],
-        #     'response': recaptcha_response
-        # }
-        # recaptcha_challenge_response = requests.post('https://recaptcha.google.cn/recaptcha/api/siteverify', data=recaptcha_challenge_data)
-
-        # cloudflare
-        recaptcha_response = request.form.get('cf-turnstile-response')
-        recaptcha_challenge_data = {
-            'secret': app.config['RECAPTCHA_SECRET_KEY'],
-            'response': recaptcha_response
-        }
-        recaptcha_challenge_response = requests.post('https://challenges.cloudflare.com/turnstile/v0/siteverify', data=recaptcha_challenge_data)
-
-        recaptcha_challenge_result = recaptcha_challenge_response.json()
-        if recaptcha_challenge_result['success']:
-            username = request.form.get('username')
-            email = request.form.get('email')
-            password = request.form.get('password')
-
-            # 检查用户名是否已被注册
-            existing_user = User.query.filter_by(username=username).first()
-            if existing_user:
-                flash('该用户名已被注册，请选择其他用户名。')
-                return render_template('signup.html', form=form, recaptcha_site_key=app.config['RECAPTCHA_SITE_KEY'], title='注册')
-
-            # 检查邮箱是否已被注册
-            existing_email = User.query.filter_by(email=email).first()
-            if existing_email:
-                flash('该邮箱已被注册，请使用其他邮箱。')
-                return render_template('signup.html', form=form, recaptcha_site_key=app.config['RECAPTCHA_SITE_KEY'], title='注册')
-
-            user = User(username=username, email=email, password=password)
-            email_suffix = email.split('@')[-1]
-            email_prefix = email.split('@')[0]
-            # if prefix does not contain "list-"
-            if email_prefix.find("list-") == -1:
-                if email_suffix == 'connect.hkust-gz.edu.cn':
-                    user.identity = 'Student'
-                elif email_suffix == 'hkust-gz.edu.cn':
-                    user.identity = 'Teacher'
-                ok,message = user.bind_teacher(email)
-                #TODO: deal with bind feedback
-            else:
-                abort(403, "必须使用港科广学生或教师邮箱注册")
-            send_confirm_mail(user.email)
-            user.save()
-            #login_user(user)
-            '''注册完毕后显示一个需要激活的页面'''
-            return render_template('feedback.html', status=True, message=_('我们已经向您发送了激活邮件，请在邮箱中点击激活链接。如果您没有收到邮件，有可能是在垃圾箱中。'), title='注册')
-        else:
-            return render_template('feedback.html', status=False, message=_('验证码错误，请重试。'), title='注册')
-#TODO: log error
-    if form.errors:
-        # {'username': ['此用户名已被他人使用！'], 'email': ['此邮件地址已被注册！']}
-        print(form.errors)
-        flash(form.errors, 'error')
-    return render_template('signup.html', form=form, recaptcha_site_key = app.config['RECAPTCHA_SITE_KEY'], title='注册')
+    if request.method == 'GET':
+        return render_template('signup.html')
+    
+    # 获取表单数据
+    username = request.form.get('username')
+    email = request.form.get('email','').lower()
+    password = request.form.get('password')
+    
+    user = User(username=username,email=email,password=password)
+    db.session.add(user)
+    db.session.commit()
+    
+    # 暂时注释掉邮件发送功能
+    # try:
+    #     send_confirm_mail(user.email)
+    # except:
+    #     pass
+    
+    # 直接确认用户
+    user.confirm()
+    
+    login_user(user)
+    return redirect(url_for('home.index'))
 
 
 @home.route('/confirm-email/')

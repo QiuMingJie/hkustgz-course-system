@@ -24,13 +24,13 @@ SQLALCHEMY_DATABASE_URI = 'mysql+mysqldb://root:@localhost/icourse?charset=utf8m
 SQLALCHEMY_TRACK_MODIFICATIONS = False
 
 # Flask mail
-MAIL_SERVER = 'localhost'
-MAIL_PORT = 25
-MAIL_USE_TLS = False
+MAIL_SERVER = 'smtp.gmail.com'
+MAIL_PORT = 587
+MAIL_USE_TLS = True
 MAIL_USE_SSL = False
 MAIL_DEBUG = DEBUG
-MAIL_USERNAME = None
-MAIL_PASSWORD = None
+MAIL_USERNAME = 'your-email@gmail.com'
+MAIL_PASSWORD = 'your-password'
 MAIL_DEFAULT_SENDER = 'support@icourse.club'
 MAIL_MAX_EMAILS = None
 # MAIL_SUPPRESS_SEND =
