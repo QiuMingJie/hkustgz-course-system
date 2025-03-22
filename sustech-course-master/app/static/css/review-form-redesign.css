@@ -1,0 +1,863 @@
+/* 课程评价表单页面样式 */
+
+/* 评价表单容器 */
+.review-form-card {
+  background-color: white;
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--box-shadow);
+  padding: 2rem;
+  margin-bottom: 2rem;
+}
+
+.review-form-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.review-form-title {
+  display: flex;
+  align-items: center;
+  margin: 0;
+}
+
+.review-form-title i {
+  color: var(--primary);
+  margin-right: 0.75rem;
+  font-size: 1.5rem;
+}
+
+.review-form-title span {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--primary);
+}
+
+.review-form-subtitle {
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+  margin-top: 0.5rem;
+}
+
+.review-form-subtitle a {
+  color: var(--primary);
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.review-form-subtitle a:hover {
+  text-decoration: underline;
+}
+
+.review-form-course-info {
+  background-color: rgba(42, 100, 195, 0.05);
+  border-radius: var(--border-radius);
+  padding: 0.75rem 1.25rem;
+  margin-bottom: 2rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  align-items: center;
+}
+
+.review-form-course-info-item {
+  display: flex;
+  align-items: center;
+}
+
+.review-form-course-info-item i {
+  color: var(--primary);
+  margin-right: 0.5rem;
+  font-size: 0.9rem;
+}
+
+.review-form-course-info-item span {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+}
+
+/* 评分部分样式 */
+.review-form-section {
+  margin-bottom: 2rem;
+}
+
+.review-form-section-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--primary);
+  margin-bottom: 1.25rem;
+  display: flex;
+  align-items: center;
+}
+
+.review-form-section-title i {
+  margin-right: 0.75rem;
+}
+
+/* 学期选择样式 */
+.review-form-term-select {
+  margin-bottom: 1.5rem;
+}
+
+.review-form-term-select label {
+  font-weight: 600;
+  color: var(--text-secondary);
+  margin-bottom: 0.5rem;
+  display: block;
+}
+
+.review-form-term-select select {
+  width: 100%;
+  max-width: 300px;
+  padding: 0.5rem 1rem;
+  border-radius: var(--border-radius);
+  border: 1px solid var(--border-color);
+  background-color: white;
+  color: var(--text-primary);
+  font-size: 1rem;
+}
+
+.review-form-term-hint {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  margin-top: 0.5rem;
+}
+
+/* 评分指标样式 */
+.review-form-metrics {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.review-form-metric {
+  background-color: #f8f9fa;
+  border-radius: var(--border-radius);
+  padding: 1.25rem;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.review-form-metric:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--box-shadow);
+}
+
+.review-form-metric-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+}
+
+.review-form-metric-title i {
+  margin-right: 0.5rem;
+  color: var(--primary);
+}
+
+.review-form-metric-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+/* 自定义单选按钮样式 */
+.metric-option {
+  display: inline-block;
+  position: relative;
+}
+
+.metric-option input[type="radio"] {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.metric-option label {
+  display: inline-block;
+  background-color: white;
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  padding: 0.5rem 0.75rem;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.metric-option input[type="radio"]:checked + label {
+  background-color: var(--primary);
+  color: white;
+  border-color: var(--primary);
+  font-weight: 500;
+}
+
+.metric-option label:hover {
+  background-color: rgba(42, 100, 195, 0.1);
+  border-color: var(--primary-light);
+  color: var(--primary);
+}
+
+/* 成绩选择样式 */
+.review-form-grade {
+  margin-bottom: 1.5rem;
+}
+
+.review-form-grade label {
+  font-weight: 600;
+  color: var(--text-secondary);
+  margin-bottom: 0.5rem;
+  display: block;
+}
+
+.review-form-grade select {
+  width: 100%;
+  max-width: 200px;
+  padding: 0.5rem 1rem;
+  border-radius: var(--border-radius);
+  border: 1px solid var(--border-color);
+  background-color: white;
+  color: var(--text-primary);
+  font-size: 1rem;
+}
+
+/* 星级评分样式 */
+.review-form-rating {
+  margin-bottom: 2rem;
+}
+
+.review-form-rating label {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 1rem;
+  display: block;
+}
+
+.rating-stars {
+  margin-top: 0.5rem;
+}
+
+.rating-value {
+  display: inline-block;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--accent);
+  margin-left: 1rem;
+  vertical-align: middle;
+}
+
+/* 评论内容区域样式 */
+.review-form-content {
+  margin-bottom: 2rem;
+}
+
+.review-form-content-header {
+  margin-bottom: 1rem;
+}
+
+.review-form-content-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--primary);
+  margin-bottom: 0.5rem;
+}
+
+.review-form-content-subtitle {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+}
+
+.review-form-content-subtitle code {
+  background-color: #f1f3f5;
+  padding: 0.1rem 0.3rem;
+  border-radius: 3px;
+  font-size: 0.85rem;
+}
+
+.review-form-editor {
+  margin-bottom: 1rem;
+  border-radius: var(--border-radius);
+  overflow: hidden;
+}
+
+.word-count {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  text-align: right;
+}
+
+/* 附加选项样式 */
+.review-form-options {
+  margin-bottom: 2rem;
+}
+
+.review-form-option {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.75rem;
+}
+
+.review-form-option input[type="checkbox"] {
+  margin-right: 0.75rem;
+  width: 1.1rem;
+  height: 1.1rem;
+}
+
+.review-form-option label {
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+}
+
+.teacher-note {
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  margin-left: 2rem;
+  margin-top: 0.25rem;
+}
+
+/* 提交按钮样式 */
+.review-form-submit {
+  text-align: right;
+  margin-top: 2rem;
+}
+
+.review-form-submit .btn {
+  padding: 0.75rem 2rem;
+  font-size: 1.1rem;
+}
+
+.review-form-submit .btn i {
+  margin-right: 0.5rem;
+}
+
+/* 特殊状态样式 */
+.alert-error {
+  background-color: rgba(220, 53, 69, 0.1);
+  color: #dc3545;
+  border: 1px solid rgba(220, 53, 69, 0.25);
+  border-radius: var(--border-radius);
+  padding: 1rem 1.25rem;
+  margin-bottom: 1.5rem;
+}
+
+/* 响应式调整 */
+@media (max-width: 768px) {
+  .review-form-card {
+    padding: 1.5rem;
+  }
+  
+  .review-form-metrics {
+    grid-template-columns: 1fr;
+  }
+  
+  .review-form-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .review-form-course-info {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+  
+  .review-form-submit {
+    text-align: center;
+  }
+  
+  .review-form-submit .btn {
+    width: 100%;
+  }
+}
+
+/* 评价详情页面样式 */
+.reviews-container {
+  margin-top: 2rem;
+  margin-bottom: 3rem;
+}
+
+.reviews-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.reviews-title {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--primary);
+  margin: 0;
+  display: flex;
+  align-items: center;
+}
+
+.reviews-title i {
+  margin-right: 0.75rem;
+}
+
+.reviews-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.reviews-stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+  background-color: rgba(42, 100, 195, 0.05);
+  border-radius: var(--border-radius);
+  padding: 1.25rem;
+}
+
+.review-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.review-stat-label {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  margin-bottom: 0.5rem;
+}
+
+.review-stat-value {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--primary);
+}
+
+.review-rating-distribution {
+  flex-grow: 1;
+  min-width: 250px;
+}
+
+.rating-bars {
+  margin-top: 0.5rem;
+}
+
+.rating-bar {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.rating-label {
+  width: 30px;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+}
+
+.rating-track {
+  flex-grow: 1;
+  height: 8px;
+  background-color: #e9ecef;
+  border-radius: 4px;
+  margin: 0 0.75rem;
+  overflow: hidden;
+}
+
+.rating-fill {
+  height: 100%;
+  background-color: var(--primary);
+}
+
+.rating-count {
+  width: 35px;
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  text-align: right;
+}
+
+/* 筛选部分 */
+.reviews-filter {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.reviews-filter-item {
+  display: flex;
+  align-items: center;
+}
+
+.reviews-filter-label {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  margin-right: 0.5rem;
+}
+
+.reviews-filter-select {
+  padding: 0.4rem 0.75rem;
+  border-radius: var(--border-radius);
+  border: 1px solid var(--border-color);
+  background-color: white;
+  color: var(--text-primary);
+  font-size: 0.9rem;
+}
+
+.review-card {
+  background-color: white;
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--box-shadow);
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.review-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+.review-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.review-author {
+  display: flex;
+  align-items: center;
+}
+
+.review-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  margin-right: 1rem;
+  object-fit: cover;
+  background-color: var(--light);
+}
+
+.review-author-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.review-author-name {
+  font-weight: 600;
+  color: var(--text-primary);
+  font-size: 1rem;
+  margin-bottom: 0.25rem;
+}
+
+.review-term {
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+}
+
+.review-rating {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.review-score {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--primary);
+}
+
+.review-date {
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  margin-top: 0.25rem;
+}
+
+.review-metrics {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.25rem;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--border-color-light);
+}
+
+.review-metric {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.review-metric-value {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.review-metric-label {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  margin-top: 0.25rem;
+}
+
+.review-content {
+  color: var(--text-primary);
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
+}
+
+.review-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.review-votes {
+  display: flex;
+  align-items: center;
+}
+
+.review-vote-btn {
+  display: flex;
+  align-items: center;
+  padding: 0.4rem 0.75rem;
+  background: none;
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  color: var(--text-secondary);
+  margin-right: 0.75rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.review-vote-btn:hover {
+  background-color: rgba(42, 100, 195, 0.05);
+  border-color: var(--primary-light);
+  color: var(--primary);
+}
+
+.review-vote-btn.active {
+  background-color: var(--primary);
+  border-color: var(--primary);
+  color: white;
+}
+
+.review-vote-btn i {
+  margin-right: 0.5rem;
+}
+
+.review-comments-toggle {
+  color: var(--text-secondary);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.4rem 0.75rem;
+  display: flex;
+  align-items: center;
+  font-size: 0.9rem;
+}
+
+.review-comments-toggle:hover {
+  color: var(--primary);
+}
+
+.review-comments-toggle i {
+  margin-right: 0.5rem;
+}
+
+.review-comments {
+  margin-top: 1.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border-color-light);
+}
+
+.review-comment {
+  display: flex;
+  margin-bottom: 1.25rem;
+}
+
+.comment-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  margin-right: 0.75rem;
+  flex-shrink: 0;
+  background-color: var(--light);
+}
+
+.comment-content {
+  flex-grow: 1;
+}
+
+.comment-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.25rem;
+}
+
+.comment-author {
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: var(--text-primary);
+}
+
+.comment-date {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.comment-text {
+  font-size: 0.95rem;
+  color: var(--text-primary);
+  line-height: 1.5;
+}
+
+.comment-form {
+  display: flex;
+  margin-top: 1rem;
+}
+
+.comment-input {
+  flex-grow: 1;
+  padding: 0.6rem 1rem;
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  font-size: 0.95rem;
+  margin-right: 0.75rem;
+}
+
+.comment-submit {
+  padding: 0.6rem 1.25rem;
+  background-color: var(--primary);
+  color: white;
+  border: none;
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.comment-submit:hover {
+  background-color: var(--primary-dark);
+}
+
+/* 分页样式 */
+.reviews-pagination {
+  display: flex;
+  justify-content: center;
+  margin-top: 2rem;
+}
+
+.pagination-item {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  margin: 0 0.25rem;
+  border-radius: var(--border-radius);
+  background-color: white;
+  color: var(--text-primary);
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: 1px solid var(--border-color);
+}
+
+.pagination-item:hover {
+  background-color: rgba(42, 100, 195, 0.05);
+  border-color: var(--primary-light);
+  color: var(--primary);
+}
+
+.pagination-item.active {
+  background-color: var(--primary);
+  color: white;
+  border-color: var(--primary);
+}
+
+.pagination-item.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.pagination-item i {
+  font-size: 1rem;
+}
+
+/* 标签样式 */
+.review-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.review-tag {
+  font-size: 0.8rem;
+  padding: 0.2rem 0.6rem;
+  border-radius: 12px;
+  background-color: rgba(42, 100, 195, 0.1);
+  color: var(--primary);
+}
+
+.review-tag.teacher {
+  background-color: rgba(220, 53, 69, 0.1);
+  color: #dc3545;
+}
+
+.review-tag.verified {
+  background-color: rgba(40, 167, 69, 0.1);
+  color: #28a745;
+}
+
+/* 响应式调整 */
+@media (max-width: 768px) {
+  .reviews-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .reviews-stats {
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .review-stat {
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
+  }
+  
+  .review-stat-label {
+    margin-bottom: 0;
+  }
+  
+  .review-card-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .review-rating {
+    align-items: flex-start;
+    margin-top: 0.5rem;
+  }
+  
+  .review-metrics {
+    justify-content: space-around;
+  }
+  
+  .review-actions {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+} 

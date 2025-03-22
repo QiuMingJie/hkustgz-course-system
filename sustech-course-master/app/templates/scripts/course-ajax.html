@@ -1,19 +1,29 @@
 <script>
 //check if the course has syllabus pdf
 $(document).ready(function() {
-    var url = $("#course-link").attr("href");
+    var url = $("#new-course-link").attr("href");
 
     $.ajax({
         url: url,
         type: 'HEAD',
         success: function() {
-            // 链接有效，显示查看按钮
-            $("#course-link-status").html('<a href="' + url + '" target="_blank" class="btn btn-white"><i class="fa-solid fa-book"></i> 课程大纲PDF</a>');
+            // 链接有效，保持原样
+            console.log("课程大纲链接有效");
         },
         error: function() {
-            // 链接无效，显示消息
-            // set button disabled
-            $("#course-link-status").html('<button class="btn btn-white" disabled>暂未收录课程大纲(´ﾟдﾟ`)</button>');
+            // 链接无效，更新显示
+            $("#new-course-link-status").html(`
+                <div class="resource-link disabled">
+                    <div class="resource-icon">
+                        <i class="fa-solid fa-file-pdf"></i>
+                    </div>
+                    <div class="resource-content">
+                        <div class="resource-title">课程大纲</div>
+                        <div class="resource-desc">暂未收录课程大纲</div>
+                    </div>
+                </div>
+            `);
+            console.log("课程大纲链接无效");
         }
     });
 });
@@ -150,6 +160,16 @@ $(document).ready(function() {
      })(action);
    }
    $('#action-btn-group').show();
+   
+   // 确保在页面加载完成后更新新按钮状态
+   setTimeout(function() {
+     try {
+       updateButtonCounts();
+       updateButtonStates();
+     } catch(e) {
+       console.error("Error updating button states:", e);
+     }
+   }, 500);
  });
 
  function delete_review(review_id, is_admin)
@@ -203,6 +223,113 @@ $(document).ready(function() {
  	$("html,body").animate({scrollTop:"0px"},200);
  });
 
+ // 连接新旧按钮功能的代码
+ $(document).ready(function() {
+   // 初始化新按钮的计数和状态
+   updateButtonCounts();
+   updateButtonStates();
+   
+   // 检查是否已经登录，如果没有登录，点击按钮时显示登录框
+   $('.modern-btn').click(function(e) {
+     // 如果用户未登录，登录操作会在原始按钮点击时处理
+   });
+ });
+
+ // 更新按钮计数
+ function updateButtonCounts() {
+   // 关注数
+   $('.follow-count').text(action_data.follow.count);
+   // 推荐数
+   $('.upvote-count').text(action_data.upvote.count);
+   // 不推荐数
+   $('.downvote-count').text(action_data.downvote.count);
+ }
+
+ // 更新按钮状态
+ function updateButtonStates() {
+   // 关注按钮状态
+   if (action_data.follow.enabled) {
+     $('.like-btn').addClass('active');
+     $('.like-icon').removeClass('fa-regular').addClass('fa-solid');
+   } else {
+     $('.like-btn').removeClass('active');
+     $('.like-icon').removeClass('fa-solid').addClass('fa-regular');
+   }
+   
+   // 推荐按钮状态
+   if (action_data.upvote.enabled) {
+     $('.recommend-btn').addClass('active');
+     $('.recommend-icon').removeClass('fa-regular').addClass('fa-solid');
+   } else {
+     $('.recommend-btn').removeClass('active');
+     $('.recommend-icon').removeClass('fa-solid').addClass('fa-regular');
+   }
+   
+   // 不推荐按钮状态
+   if (action_data.downvote.enabled) {
+     $('.not-recommend-btn').addClass('active');
+     $('.not-recommend-icon').removeClass('fa-regular').addClass('fa-solid');
+   } else {
+     $('.not-recommend-btn').removeClass('active');
+     $('.not-recommend-icon').removeClass('fa-solid').addClass('fa-regular');
+   }
+ }
+
+ // 关注按钮点击
+ function toggleLike() {
+   // 使用action_data来检查当前状态
+   if (action_data.follow.enabled) {
+     // 如果已关注，点击取消关注
+     $('.btn-follow.btn-undo').click();
+   } else {
+     // 如果未关注，点击关注
+     $('.btn-follow.btn-do').click();
+   }
+ }
+
+ // 推荐按钮点击
+ function toggleRecommend() {
+   // 使用action_data来检查当前状态
+   if (action_data.upvote.enabled) {
+     // 如果已推荐，点击取消推荐
+     $('.btn-upvote.btn-undo').click();
+   } else {
+     // 如果未推荐，点击推荐
+     $('.btn-upvote.btn-do').click();
+   }
+ }
+
+ // 不推荐按钮点击
+ function toggleNotRecommend() {
+   // 使用action_data来检查当前状态
+   if (action_data.downvote.enabled) {
+     // 如果已不推荐，点击取消不推荐
+     $('.btn-downvote.btn-undo').click();
+   } else {
+     // 如果未不推荐，点击不推荐
+     $('.btn-downvote.btn-do').click();
+   }
+ }
+
+ // 在AJAX完成后，确保更新按钮计数和状态
+ $(document).ajaxComplete(function() {
+   // 确保更新新按钮的计数和状态
+   setTimeout(function() {
+     updateButtonCounts();
+     updateButtonStates();
+   }, 200); // 稍微延迟一点，确保DOM已更新
+ });
+ 
+ // 监听原始按钮的状态变化
+ $('.btn-follow, .btn-upvote, .btn-downvote').on('click', function() {
+   // 当原始按钮被点击时，稍后更新新按钮的状态
+   setTimeout(function() {
+     updateButtonCounts();
+     updateButtonStates();
+   }, 200); // 稍微延迟一点，确保AJAX已完成
+ });
+ 
+ // 确保触发ajaxComplete事件的原始按钮操作能够正确改变新按钮状态
 </script>
 
 {% include 'scripts/review-ajax.html' %}

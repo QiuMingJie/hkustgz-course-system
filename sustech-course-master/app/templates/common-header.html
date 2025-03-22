@@ -63,6 +63,11 @@
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;600;700;900&family=Noto+Sans+Mono:wght@400;600&display=swap" rel="stylesheet">
     <link href="/static/css/style.css?ver=20240214" rel="stylesheet">
     <link href="/static/css/darkmode-override.css?ver=202401242" rel="stylesheet">
+    <!-- 全局UI升级样式 -->
+    <link href="{{ url_for('static', filename='css/global-redesign.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/course-review-redesign.css') }}" rel="stylesheet">
+    <!-- 评价表单UI升级样式 -->
+    <link href="/static/css/review-form-redesign.css?ver=20240421" rel="stylesheet">
     <meta property="og:title" content="{% if course %}HKUST-GZ - {{ course.name_with_teachers_short }}{% else %}HKUST-GZ Course Evaluation System{% endif %}" />
     <title>{% if course %}HKUST-GZ - {{ course.name_with_teachers_short }}{% else %}HKUST-GZ Course Evaluation System{% endif %}</title>
     <!-- Global site tag (gtag.js) - Google Analytics -->

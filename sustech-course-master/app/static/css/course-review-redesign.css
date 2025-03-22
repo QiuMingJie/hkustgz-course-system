@@ -1,0 +1,416 @@
+/* 课程点评部分样式 */
+:root {
+  --review-border-radius: 12px;
+  --review-box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  --review-bg-color: #fff;
+  --review-border-color: rgba(0, 0, 0, 0.1);
+  --review-highlight-color: rgba(42, 100, 195, 0.08);
+}
+
+/* 点评部分总体容器 */
+.reviews-container {
+  margin-bottom: 2rem;
+}
+
+/* 点评部分标题栏 */
+.review-section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+  padding: 1rem 0;
+  border-bottom: 2px solid var(--primary);
+}
+
+.review-section-title {
+  color: var(--primary);
+  font-size: 1.5rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  margin: 0;
+}
+
+.review-section-title i {
+  margin-right: 0.75rem;
+  font-size: 1.25rem;
+}
+
+.review-action-button {
+  background-color: var(--primary);
+  color: white;
+  border: none;
+  border-radius: var(--border-radius);
+  padding: 0.6rem 1.25rem;
+  font-size: 0.95rem;
+  display: flex;
+  align-items: center;
+  transition: all 0.2s ease;
+  text-decoration: none;
+}
+
+.review-action-button:hover {
+  background-color: var(--primary-dark);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  color: white;
+}
+
+.review-action-button i {
+  margin-right: 0.5rem;
+}
+
+/* 无评论提示 */
+.no-reviews-message {
+  background-color: var(--review-highlight-color);
+  border-radius: var(--review-border-radius);
+  padding: 2rem;
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.no-reviews-message p {
+  color: var(--text-secondary);
+  font-size: 1.1rem;
+  margin-bottom: 0;
+}
+
+/* 点评筛选器样式 */
+.reviews-filter {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  padding: 1rem;
+  background-color: var(--light);
+  border-radius: var(--border-radius);
+}
+
+.reviews-filter-item {
+  display: flex;
+  align-items: center;
+}
+
+.reviews-filter-label {
+  font-weight: 600;
+  color: var(--text-secondary);
+  margin-right: 0.75rem;
+}
+
+.reviews-filter-select {
+  padding: 0.5rem 1rem;
+  border-radius: var(--border-radius);
+  border: 1px solid var(--border-color);
+  background-color: white;
+  min-width: 120px;
+}
+
+/* 点评卡片样式 */
+.review-card {
+  background-color: var(--review-bg-color);
+  border-radius: var(--review-border-radius);
+  box-shadow: var(--review-box-shadow);
+  margin-bottom: 1.5rem;
+  overflow: hidden;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.review-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.12);
+}
+
+.review-card-header {
+  background-color: var(--primary);
+  color: white;
+  padding: 1rem 1.25rem;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.review-card-header .avatar-ssm {
+  width: 32px;
+  height: 32px;
+  border: 2px solid rgba(255, 255, 255, 0.5);
+}
+
+.review-card-header a {
+  color: white;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.review-card-header a:hover {
+  text-decoration: underline;
+}
+
+.review-card-header .fa-star, 
+.review-card-header .fa-star-half-stroke {
+  color: #FFD700;
+}
+
+.review-card-header .text-body-secondary {
+  color: rgba(255, 255, 255, 0.8) !important;
+}
+
+.review-card-header .badge {
+  font-size: 0.75rem;
+  border-radius: 12px;
+  padding: 0.25rem 0.6rem;
+}
+
+/* 点评内容区域 */
+.review-card-body {
+  padding: 1.25rem;
+}
+
+.review-metrics {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--border-color-light);
+}
+
+.review-metric {
+  display: flex;
+  align-items: center;
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+}
+
+.review-metric-label {
+  font-weight: 500;
+  margin-right: 0.25rem;
+}
+
+.review-content {
+  color: var(--text-primary);
+  line-height: 1.6;
+  font-size: 1rem;
+  padding: 0.5rem 0;
+}
+
+/* 点评底部操作区 */
+.review-card-footer {
+  background-color: rgba(0, 0, 0, 0.02);
+  border-top: 1px solid var(--border-color-light);
+  padding: 1rem 1.25rem;
+}
+
+.review-footer-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.review-date {
+  color: var(--text-muted);
+  font-size: 0.85rem;
+}
+
+.review-actions {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.review-action-link {
+  display: flex;
+  align-items: center;
+  color: var(--text-secondary);
+  text-decoration: none;
+  font-size: 0.9rem;
+  transition: color 0.2s ease;
+}
+
+.review-action-link:hover {
+  color: var(--primary);
+}
+
+.review-action-link i {
+  margin-right: 0.4rem;
+}
+
+.review-action-link.blue i {
+  color: var(--primary);
+}
+
+.review-upvotes {
+  background-color: var(--review-highlight-color);
+  border-radius: var(--border-radius);
+  padding: 0.75rem 1rem;
+  margin-top: 0.75rem;
+}
+
+/* 评论区样式 */
+.review-comments {
+  margin-top: 1rem;
+  border-top: 1px solid var(--border-color-light);
+  padding-top: 1rem;
+}
+
+.review-comments-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+.review-comments-title {
+  font-weight: 600;
+  color: var(--text-secondary);
+  font-size: 1rem;
+}
+
+.review-comment {
+  display: flex;
+  margin-bottom: 1rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px dashed var(--border-color-light);
+}
+
+.review-comment:last-child {
+  border-bottom: none;
+}
+
+.comment-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  margin-right: 1rem;
+}
+
+.comment-content {
+  flex: 1;
+}
+
+.comment-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+}
+
+.comment-author {
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.comment-author a {
+  color: var(--primary);
+  text-decoration: none;
+}
+
+.comment-author a:hover {
+  text-decoration: underline;
+}
+
+.comment-date {
+  color: var(--text-muted);
+  font-size: 0.85rem;
+}
+
+.comment-body {
+  color: var(--text-primary);
+  line-height: 1.5;
+}
+
+.comment-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 0.5rem;
+}
+
+.comment-action {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  text-decoration: none;
+  margin-left: 1rem;
+}
+
+.comment-action:hover {
+  color: var(--primary);
+}
+
+/* 评论表单 */
+.comment-form {
+  display: flex;
+  margin-top: 1rem;
+}
+
+.comment-input {
+  flex: 1;
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  font-size: 1rem;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.comment-input:focus {
+  border-color: var(--primary-light);
+  box-shadow: 0 0 0 3px rgba(42, 100, 195, 0.1);
+  outline: none;
+}
+
+.comment-submit {
+  background-color: var(--primary);
+  color: white;
+  border: none;
+  border-radius: var(--border-radius);
+  padding: 0.75rem 1.25rem;
+  margin-left: 0.75rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.comment-submit:hover {
+  background-color: var(--primary-dark);
+}
+
+/* 响应式调整 */
+@media (max-width: 768px) {
+  .review-section-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+  
+  .reviews-filter {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .reviews-filter-item {
+    width: 100%;
+  }
+  
+  .reviews-filter-select {
+    width: 100%;
+  }
+  
+  .review-card-header {
+    padding: 0.75rem 1rem;
+  }
+  
+  .review-footer-meta {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .comment-form {
+    flex-direction: column;
+  }
+  
+  .comment-submit {
+    margin-left: 0;
+    margin-top: 0.75rem;
+    width: 100%;
+  }
+} 

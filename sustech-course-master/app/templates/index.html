@@ -1,99 +1,214 @@
 {% extends "layout.html" %}
+
+{% block styles %}
+<link href="{{ url_for('static', filename='css/home-redesign.css') }}" rel="stylesheet">
+{% endblock %}
+
 {% block content %}
-
 <div class="container">
-  <div class="row float-element shadow">
-    
-    <form class="ud-pd-sm mobile" action="search" method="get">
-      <div class="form-group">
-        <input type="text" name="q" class="form-control input-lg" placeholder="搜索你感兴趣的课程">
-      </div>
-    </form>
-
-    <div class="bm-pd-md">
-      <h4 class="blue">最新点评</h4>
-      <span class="text-body-secondary">共 {{ reviews.total }} 个点评（当前第 {{ reviews.page }} 页）</span>
-
-      {% for review in reviews.items %}
-          {% if not review.is_blocked or current_user.is_admin or current_user == review.author %}
-      <div class="ud-pd-md dashed">
-        <div class="row">
-          <div class="col-sm-1 col-xs-2 right-pd-no">
-            <img class="avatar-md circle" alt="user avatar" src="{% if review.is_anonymous %}{{ review.author.default_avatar }}{% else %}{{ review.author.avatar }}{% endif %}"/>
+  <!-- 首页横幅 -->
+  <div class="home-hero">
+    <div class="home-hero-content">
+      <h1>HKUST-GZ 课程评价系统</h1>
+      <p>发现最适合你的课程，查看真实学生点评，获取选课建议，分享您的学习体验</p>
+      <div class="home-search-box">
+        <form action="search" method="get">
+          <div class="input-group">
+            <input type="text" name="q" class="form-control" placeholder="搜索课程、教师或课程代码...">
+            <button class="btn btn-light" type="submit">
+              <i class="fa fa-search"></i> 搜索
+            </button>
           </div>
-          <div class="col-md-11 col-xs-10">
-            <div class="grey bm-pd-md">
-          {% if review.is_anonymous %}
-          <span class="blue">匿名用户</span>
-          {% else %}
-	      <a href="{{ url_for('user.view_profile', user_id=review.author.id) }}">{{ review.author.username }}</a>
-          {% endif %}
-	      {% if review.publish_time == review.update_time %}点评了{% else %}更新了点评{% endif %}
-              <a href="{{ url_for('course.view_course', course_id=review.course.id) }}">{{ review.course.name }}{% if review.course.teachers %}（{{ review.course.teacher_names_display }}）{% endif %}</a>
+        </form>
+      </div>
+    </div>
+  </div>
 
-              <span class="float-right localtime" style="display: none;">{{ review.update_time|utctime }}</span>
-            </div>
-            {% include 'review-hidden.html' %}
-            <p class="text-body-secondary">{{ review.content|abstract }} <a href="{{ url_for('course.view_course', course_id=review.course.id) }}#review-{{ review.id }}">&gt;&gt;更多</a></p>
-          </div><!-- ./col-md-8 -->
-        </div><!-- ./row -->
-      </div><!-- ./dashed -->
-	{% endif %}
-      {% endfor %}
+  <!-- 统计数字 -->
+  <div class="stats-section">
+    <div class="row">
+      <div class="col-md-3 col-6">
+        <div class="stat-item">
+          <div class="stat-number">{{ stats.courses if stats else '1000+' }}</div>
+          <div class="stat-label">课程数量</div>
+        </div>
+      </div>
+      <div class="col-md-3 col-6">
+        <div class="stat-item">
+          <div class="stat-number">{{ stats.reviews if stats else '2500+' }}</div>
+          <div class="stat-label">学生点评</div>
+        </div>
+      </div>
+      <div class="col-md-3 col-6">
+        <div class="stat-item">
+          <div class="stat-number">{{ stats.teachers if stats else '300+' }}</div>
+          <div class="stat-label">教师数量</div>
+        </div>
+      </div>
+      <div class="col-md-3 col-6">
+        <div class="stat-item">
+          <div class="stat-number">{{ stats.users if stats else '5000+' }}</div>
+          <div class="stat-label">注册用户</div>
+        </div>
+      </div>
+    </div>
+  </div>
 
-<nav aria-label="Page navigation" class="mt-3">
-  <ul class="pagination flex-wrap">
-    {% if reviews.has_prev %}
-      <li class="page-item">
-        <a class="page-link" href="{{ url_for('home.index', page=reviews.prev_num) }}" aria-label="Previous">
-          <span aria-hidden="true">&laquo;</span>
-        </a>
-      </li>
-    {% else %}
-      <li class="page-item disabled">
-        <a class="page-link" href="#" aria-label="Previous" tabindex="-1" aria-disabled="true">
-          <span aria-hidden="true">&laquo;</span>
-        </a>
-      </li>
-    {% endif %}
+  <!-- 特色功能部分 -->
+  <div class="features-section">
+    <div class="row">
+      <div class="col-lg-4 col-md-6 mb-4">
+        <div class="feature-card">
+          <div class="feature-icon">
+            <i class="fa fa-star"></i>
+          </div>
+          <h3 class="feature-title">真实学生点评</h3>
+          <p class="feature-desc">浏览来自课堂同学的真实评价，了解课程的实际难度和收获，帮助您做出明智的选课决定。</p>
+        </div>
+      </div>
+      
+      <div class="col-lg-4 col-md-6 mb-4">
+        <div class="feature-card">
+          <div class="feature-icon">
+            <i class="fa fa-search"></i>
+          </div>
+          <h3 class="feature-title">智能课程搜索</h3>
+          <p class="feature-desc">使用我们的搜索功能，快速找到您感兴趣的课程、教师或课程类型，节省选课时间。</p>
+        </div>
+      </div>
+      
+      <div class="col-lg-4 col-md-6 mb-4">
+        <div class="feature-card">
+          <div class="feature-icon">
+            <i class="fa fa-comments"></i>
+          </div>
+          <h3 class="feature-title">分享您的体验</h3>
+          <p class="feature-desc">分享您的课程经历，帮助其他同学，同时记录和回顾您的学习过程和收获。</p>
+        </div>
+      </div>
+    </div>
+  </div>
 
-    {% for page in reviews.iter_pages(left_edge=1, right_edge=0) %}
-      {% if page == reviews.page %}
-        <li class="page-item active" aria-current="page">
-          <a class="page-link" href="#">{{ page }}<span class="sr-only">(current)</span></a>
-        </li>
-      {% elif page %}
-        <li class="page-item">
-          <a class="page-link" href="{{ url_for('home.index', page=page) }}">{{ page }}</a>
-        </li>
-      {% else %}
-        <li class="page-item disabled">
-          <a class="page-link" href="#">...</a>
-        </li>
-      {% endif %}
-    {% endfor %}
-
-    {% if reviews.has_next %}
-      <li class="page-item">
-        <a class="page-link" href="{{ url_for('home.index', page=reviews.next_num) }}" aria-label="Next">
-          <span aria-hidden="true">&raquo;</span>
-        </a>
-      </li>
-    {% endif %}
-  </ul>
-</nav>
-
-
-
+  <!-- 最新点评部分 -->
+  <div class="latest-reviews-section">
+    <div class="section-header">
+      <h2 class="section-title">最新点评</h2>
+      <a href="{{ url_for('home.latest_reviews') }}" class="view-all-link">查看所有 <i class="fa fa-arrow-right"></i></a>
     </div>
 
-  </div><!-- /.float-element -->
-</div><!-- /.container -->
+    <div class="row">
+      {% for review in reviews.items %}
+        {% if not review.is_blocked or current_user.is_admin or current_user == review.author %}
+          <div class="col-lg-6">
+            <div class="review-card">
+              <div class="review-header">
+                <img class="review-user-avatar" alt="user avatar" src="{% if review.is_anonymous %}{{ review.author.default_avatar }}{% else %}{{ review.author.avatar }}{% endif %}"/>
+                <div class="review-user-info">
+                  <h3 class="review-username">
+                    {% if review.is_anonymous %}
+                      匿名用户
+                    {% else %}
+                      <a href={{ url_for('user.view_profile', user_id=review.author.id) }}>{{ review.author.username }}</a>
+                    {% endif %}
+                  </h3>
+                  <div class="review-meta">
+                    <span class="review-action">
+                      {% if review.publish_time == review.update_time %}点评了{% else %}更新了点评{% endif %}
+                    </span>
+                    <a href="{{ url_for('course.view_course', course_id=review.course.id) }}" class="review-course">
+                      {{ review.course.name }}{% if review.course.teachers %}（{{ review.course.teacher_names_display }}）{% endif %}
+                    </a>
+                  </div>
+                </div>
+                <div class="review-rating">
+                  {% for star in range(0,5) %}
+                    {% if review.rate >= 1.5 + star * 2 %}
+                      <i class="fa-sharp fa-solid fa-star" aria-hidden="true"></i>
+                    {% elif review.rate >= 0.5 + star * 2 %}
+                      <i class="fa-sharp fa-regular fa-star-half-stroke" aria-hidden="true"></i>
+                    {% else %}
+                      <i class="fa-sharp fa-regular fa-star" aria-hidden="true"></i>
+                    {% endif %}
+                  {% endfor %}
+                </div>
+              </div>
+              <div class="review-body">
+                <p>{{ review.content|abstract }} <a href="{{ url_for('course.view_course', course_id=review.course.id) }}#review-{{ review.id }}">&gt;&gt;查看完整评价</a></p>
+              </div>
+              <div class="review-footer">
+                <span class="review-date localtime" style="display: none;">{{ review.update_time|utctime }}</span>
+                <div class="review-actions">
+                  <a href="{{ url_for('course.view_course', course_id=review.course.id) }}#review-{{ review.id }}">
+                    <i class="fa fa-comment"></i> 评论
+                  </a>
+                  <a href="{{ url_for('course.view_course', course_id=review.course.id) }}">
+                    <i class="fa fa-eye"></i> 查看课程
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        {% endif %}
+      {% endfor %}
+    </div>
 
+    <!-- 分页 -->
+    <nav aria-label="Page navigation" class="mt-4">
+      <ul class="pagination justify-content-center">
+        {% if reviews.has_prev %}
+          <li class="page-item">
+            <a class="page-link" href="{{ url_for('home.index', page=reviews.prev_num) }}" aria-label="Previous">
+              <span aria-hidden="true">&laquo;</span>
+            </a>
+          </li>
+        {% else %}
+          <li class="page-item disabled">
+            <a class="page-link" href="#" aria-label="Previous" tabindex="-1" aria-disabled="true">
+              <span aria-hidden="true">&laquo;</span>
+            </a>
+          </li>
+        {% endif %}
+
+        {% for page in reviews.iter_pages(left_edge=1, right_edge=0) %}
+          {% if page == reviews.page %}
+            <li class="page-item active" aria-current="page">
+              <a class="page-link" href="#">{{ page }}<span class="sr-only">(current)</span></a>
+            </li>
+          {% elif page %}
+            <li class="page-item">
+              <a class="page-link" href="{{ url_for('home.index', page=page) }}">{{ page }}</a>
+            </li>
+          {% else %}
+            <li class="page-item disabled">
+              <a class="page-link" href="#">...</a>
+            </li>
+          {% endif %}
+        {% endfor %}
+
+        {% if reviews.has_next %}
+          <li class="page-item">
+            <a class="page-link" href="{{ url_for('home.index', page=reviews.next_num) }}" aria-label="Next">
+              <span aria-hidden="true">&raquo;</span>
+            </a>
+          </li>
+        {% endif %}
+      </ul>
+    </nav>
+  </div>
+</div>
 {% endblock %}
 
 {% block script %}
 <script>
- $('#inputCourse').focus();
+  // 初始化可能需要的首页特定JavaScript
+  $(document).ready(function() {
+    // 显示本地时间
+    $('.localtime').each(function() {
+      var utcTime = $(this).text();
+      var localTime = moment.utc(utcTime).local().format('YYYY-MM-DD HH:mm');
+      $(this).text(localTime);
+      $(this).show();
+    });
+  });
 </script>
 {% endblock %}
