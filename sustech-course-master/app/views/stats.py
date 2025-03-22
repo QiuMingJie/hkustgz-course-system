@@ -19,11 +19,18 @@ def index(lang_en=False):
     site_stat['course_count'] = Course.query.count()
     site_stat['review_count'] = Review.query.filter(Review.is_hidden == False).filter(Review.is_blocked == False).count()
     site_stat['registered_teacher_count'] = User.query.filter(User.identity == 'Teacher').count()
-    site_stat['course_avg_rate'] = db.session.query(db.func.avg(Review.rate)).first()[0]
-    site_stat['course_avg_rate_count'] = db.session.query(db.func.count(Review.id) / db.func.count(db.func.distinct(Review.course_id))).first()[0]
+    
+    # 处理可能为None的平均值
+    avg_rate = db.session.query(db.func.avg(Review.rate)).first()[0]
+    site_stat['course_avg_rate'] = float(avg_rate) if avg_rate is not None else 0.0
+    
+    # 处理平均点评数
+    review_count = site_stat['review_count']
+    course_count = site_stat['course_count']
+    site_stat['course_avg_rate_count'] = float(review_count) / course_count if course_count > 0 else 0.0
 
     first_user = User.query.order_by(User.register_time).limit(1).first()
-    site_stat['running_days'] = (datetime.now() - first_user.register_time).days
+    site_stat['running_days'] = (datetime.now() - first_user.register_time).days if first_user else 0
 
     # find the distribution of the number of reviews per course
     course_review_counts = db.session.query(func.count(Review.id).label('review_count')).group_by(Review.course_id).subquery()
@@ -69,11 +76,17 @@ def view_ranking():
     else:
         default_show_count = 10
 
+    # 处理可能为None的统计值
+    avg_rate = db.session.query(db.func.avg(Review.rate)).first()[0]
+    avg_rate_count = db.session.query(db.func.count(Review.id) / db.func.count(db.func.distinct(Review.course_id))).first()[0]
+    avg_review_upvotes = db.session.query(func.sum(Review.upvote_count) / func.count(Review.id)).first()[0]
+    avg_review_length = db.session.query(func.sum(func.length(Review.content)) / func.count(Review.id)).first()[0]
+
     stats = {
-        'avg_rate': db.session.query(db.func.avg(Review.rate)).first()[0],
-        'avg_rate_count': db.session.query(db.func.count(Review.id) / db.func.count(db.func.distinct(Review.course_id))).first()[0],
-        'avg_review_upvotes': db.session.query(func.sum(Review.upvote_count) / func.count(Review.id)).first()[0],
-        'avg_review_length': db.session.query(func.sum(func.length(Review.content)) / func.count(Review.id)).first()[0]
+        'avg_rate': float(avg_rate) if avg_rate is not None else 0.0,
+        'avg_rate_count': float(avg_rate_count) if avg_rate_count is not None else 0.0,
+        'avg_review_upvotes': float(avg_review_upvotes) if avg_review_upvotes is not None else 0.0,
+        'avg_review_length': float(avg_review_length) if avg_review_length is not None else 0.0
     }
 
     # helper queries for fetching top teachers

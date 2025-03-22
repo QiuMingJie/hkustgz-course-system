@@ -87,17 +87,30 @@ def handle_upload(file,type):
         file_suffix = old_filename.split('.')[-1]
         new_filename = rand_str() + '.' + file_suffix
         try:
-            upload_path = os.path.join(app.config['UPLOAD_FOLDER'],type+'s/')
-            file.save(os.path.join(upload_path, new_filename))
-        except FileNotFoundError:
-            os.makedirs(upload_path)
-            file.save(os.path.join(upload_path, new_filename))
+            # 确保目录存在
+            upload_path = os.path.join(app.config['UPLOAD_FOLDER'], type+'s')
+            if not os.path.exists(upload_path):
+                os.makedirs(upload_path, exist_ok=True)
+            
+            # 保存文件
+            file_path = os.path.join(upload_path, new_filename)
+            print(f"Saving file to: {file_path}")  # 调试信息
+            file.save(file_path)
+            
+            # 验证文件是否成功保存
+            if os.path.exists(file_path):
+                print(f"File successfully saved at: {file_path}")  # 调试信息
+                img = ImageStore(old_filename, new_filename)
+                img.save()
+                return True, new_filename
+            else:
+                print(f"File save failed: {file_path}")  # 调试信息
+                return False, "File save failed"
+                
         except Exception as e:
-            return False,e
-        img = ImageStore(old_filename,new_filename)
-        img.save()
-        return True,new_filename
-    return False,"File type disallowd!"
+            print(f"Error saving file: {str(e)}")  # 调试信息
+            return False, str(e)
+    return False, "File type disallowed!"
 
 def resize_avatar(old_file):
     upload_base = os.path.join(app.config['UPLOAD_FOLDER'],'image'+'s/')

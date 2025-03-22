@@ -37,7 +37,7 @@ MAIL_MAX_EMAILS = None
 MAIL_ASCII_ATTACHMENTS = False
 
 # Upload config
-UPLOAD_FOLDER = 'uploads'
+UPLOAD_FOLDER = 'app/static/uploads'
 # Alowed extentsions for a filetype
 # for example 'image': set(['png', 'jpg', 'jpeg', 'gif'])
 ALLOWED_EXTENSIONS = {
@@ -47,7 +47,7 @@ ALLOWED_EXTENSIONS = {
 MAX_CONTENT_LENGTH = 100 * 1024 * 1024
 
 
-IMAGE_PATH = 'uploads/images'
+IMAGE_PATH = 'app/static/uploads/images'
 
 
 # Debugbar Settings
