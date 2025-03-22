@@ -1,21 +1,45 @@
-<div class="select-box desktop mb-2 course-type-select-desktop">
+<div class="rmp-filter-bar desktop mb-4">
   {% if course_type_dict %}
-  <nav>
-    <div class="nav nav-pills" id="nav-tab" role="tablist">
-    <a class="nav-link disabled fw-bold" aria-disabled="true">课程类别：</a>
-      <a class="nav-link {% if not course_type %}active{% endif %}" href="{{ url_for(this_module, q=keyword, sort_by=sort_by) }}">全部</a>
-      {% for type, course_type_label in course_type_dict.items() %}
-      <a class="nav-link {% if type==course_type %}active{% endif %}" href="{{ url_for(this_module, q=keyword, course_type=type, sort_by=sort_by) }}">{{ course_type_label[0] }}</a>
-      {% endfor %}
-    </div>
-  </nav>
+  <div class="mb-2">
+    <span class="rmp-filter-label">课程类别：</span>
+    <nav class="d-inline-block ms-3">
+      <div class="rmp-filter-nav nav nav-pills" id="nav-tab" role="tablist">
+        <a class="nav-link {% if not course_type %}active{% endif %}" href="{{ url_for(this_module, q=keyword, sort_by=sort_by) }}">全部</a>
+        {% for type, course_type_label in course_type_dict.items() %}
+        <a class="nav-link {% if type==course_type %}active{% endif %}" href="{{ url_for(this_module, q=keyword, course_type=type, sort_by=sort_by) }}">{{ course_type_label[0] }}</a>
+        {% endfor %}
+      </div>
+    </nav>
+  </div>
   {% endif %}
 
-  <nav class="mt-2">
-    <div class="nav nav-pills" id="nav-tab-sort" role="tablist">
-      <a class="nav-link disabled fw-bold" aria-disabled="true">排序方式：</a>
-      <a class="nav-link {% if sort_by!='popular' %}active{% endif %}" href="{{ url_for(this_module, q=keyword, course_type=course_type, sort_by='rating') }}">课程评分</a>
-      <a class="nav-link {% if sort_by=='popular' %}active{% endif %}" href="{{ url_for(this_module, q=keyword, course_type=course_type, sort_by='popular') }}">点评数量</a>
-    </div>
-  </nav>
+  <div class="mt-3">
+    <span class="rmp-filter-label">排序方式：</span>
+    <nav class="d-inline-block ms-3">
+      <div class="rmp-filter-nav nav nav-pills" id="nav-tab-sort" role="tablist">
+        <a class="nav-link {% if sort_by!='popular' %}active{% endif %}" href="{{ url_for(this_module, q=keyword, course_type=course_type, sort_by='rating') }}">课程评分</a>
+        <a class="nav-link {% if sort_by=='popular' %}active{% endif %}" href="{{ url_for(this_module, q=keyword, course_type=course_type, sort_by='popular') }}">点评数量</a>
+      </div>
+    </nav>
+  </div>
+</div>
+
+<div class="rmp-filter-bar mobile mb-3">
+  <div class="mb-3">
+    <span class="rmp-filter-label d-block mb-4">课程类别：</span>
+    <select class="form-select" onchange="window.location.href=this.value">
+      <option value="{{ url_for(this_module, q=keyword, sort_by=sort_by) }}" {% if not course_type %}selected{% endif %}>全部</option>
+      {% for type, course_type_label in course_type_dict.items() %}
+      <option value="{{ url_for(this_module, q=keyword, course_type=type, sort_by=sort_by) }}" {% if type==course_type %}selected{% endif %}>{{ course_type_label[0] }}</option>
+      {% endfor %}
+    </select>
+  </div>
+  
+  <div class="mt-3">
+    <span class="rmp-filter-label d-block mb-3">排序方式：</span>
+    <select class="form-select" onchange="window.location.href=this.value">
+      <option value="{{ url_for(this_module, q=keyword, course_type=course_type, sort_by='rating') }}" {% if sort_by!='popular' %}selected{% endif %}>课程评分</option>
+      <option value="{{ url_for(this_module, q=keyword, course_type=course_type, sort_by='popular') }}" {% if sort_by=='popular' %}selected{% endif %}>点评数量</option>
+    </select>
+  </div>
 </div>

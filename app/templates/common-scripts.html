@@ -7,6 +7,44 @@ $(document).ready(function() {
     //add img-fluid to all images
     $('.review img').addClass('img-fluid');
 
+    // 添加平滑滚动效果
+    $('a[href*="#"]').not('[href="#"]').click(function(event) {
+        if (
+            location.pathname.replace(/^\//, '') == this.pathname.replace(/^\//, '') 
+            && 
+            location.hostname == this.hostname
+        ) {
+            var target = $(this.hash);
+            target = target.length ? target : $('[name=' + this.hash.slice(1) + ']');
+            if (target.length) {
+                event.preventDefault();
+                $('html, body').animate({
+                    scrollTop: target.offset().top - 70
+                }, 1000);
+            }
+        }
+    });
+
+    // 添加卡片悬停效果
+    $('.card').hover(
+        function() {
+            $(this).addClass('shadow-lg');
+        },
+        function() {
+            $(this).removeClass('shadow-lg');
+        }
+    );
+
+    // 添加表单验证动画
+    $('form').on('submit', function() {
+        $(this).addClass('was-validated');
+    });
+
+    // 添加加载动画
+    $(window).on('load', function() {
+        $('.loading-overlay').fadeOut();
+    });
+
     // 定义一个函数来更新暗色模式
     function updateDarkMode(isDark) {
         if (isDark) {
@@ -42,5 +80,12 @@ $(document).ready(function() {
             e.preventDefault();
             $('#searchInput').focus();
         }
+    });
+
+    // 添加搜索框动画效果
+    $('#searchInput').on('focus', function() {
+        $(this).parent().addClass('shadow-sm');
+    }).on('blur', function() {
+        $(this).parent().removeClass('shadow-sm');
     });
 }); 

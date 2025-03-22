@@ -1,0 +1,268 @@
+/* RateMyProfessors风格的CSS */
+
+:root {
+  --primary-color: #2a64c3;
+  --secondary-color: #19aeda;
+  --accent-color: #f9a51a;
+  --text-color: #3a3a3a;
+  --light-gray: #f5f5f5;
+  --medium-gray: #e0e0e0;
+  --dark-gray: #a9a9a9;
+  --success-color: #21bf73;
+  --progress-green: #8ed58e;
+  --progress-red: #ff9e9e;
+}
+
+/* 基础样式 */
+body {
+  font-family: 'Roboto', 'Noto Sans SC', sans-serif;
+  color: var(--text-color);
+  background-color: #f9f9f9;
+}
+
+/* 卡片容器 */
+.rmp-course-card {
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  padding: 20px;
+  margin-bottom: 20px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.rmp-course-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* 课程标题 */
+.rmp-course-title {
+  font-size: 1.3rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  color: var(--primary-color);
+}
+
+.rmp-course-title a {
+  color: var(--primary-color);
+  text-decoration: none;
+}
+
+.rmp-course-title a:hover {
+  text-decoration: underline;
+}
+
+/* 课程代码 */
+.rmp-course-code {
+  display: inline-block;
+  background-color: #f0f0f0;
+  color: #666;
+  font-size: 0.8rem;
+  font-weight: 600;
+  padding: 3px 8px;
+  border-radius: 4px;
+  margin-left: 8px;
+}
+
+/* 教师名字 */
+.rmp-teacher-name {
+  color: #666;
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+}
+
+/* 学期显示 */
+.rmp-term {
+  color: var(--dark-gray);
+  font-size: 0.85rem;
+  margin-bottom: 10px;
+}
+
+/* 评分星星 */
+.rmp-stars {
+  margin: 10px 0;
+}
+
+.rmp-stars .fa-star,
+.rmp-stars .fa-star-half-stroke {
+  color: var(--accent-color);
+  font-size: 1rem;
+}
+
+.rmp-rating-value {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: var(--primary-color);
+  margin: 0 10px;
+  vertical-align: middle;
+}
+
+.rmp-reviews-count {
+  color: var(--dark-gray);
+  font-size: 0.9rem;
+}
+
+/* 指标评分 */
+.rmp-metrics {
+  display: flex;
+  flex-wrap: wrap;
+  margin-top: 20px;
+  gap: 15px 30px;
+}
+
+.rmp-metric-item {
+  flex: 1 1 45%;
+  min-width: 200px;
+}
+
+.rmp-metric-label {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 8px;
+  display: block;
+}
+
+/* 分段式进度条 */
+.rmp-segments {
+  display: flex;
+  width: 100%;
+  height: 24px;
+  margin-bottom: 6px;
+  gap: 5px;
+}
+
+.rmp-segment {
+  flex: 1;
+  height: 100%;
+  border-radius: 4px;
+  background-color: #e6e6e6;
+  transition: background-color 0.2s ease;
+}
+
+.rmp-segment.active {
+  background-color: #7fd07f;
+}
+
+.rmp-segment.active-red {
+  background-color: #ff8f8f;
+}
+
+.rmp-metric-value {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #333;
+  margin-top: 6px;
+  display: block;
+}
+
+/* 标签和徽章 */
+.rmp-badge {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  margin-right: 5px;
+}
+
+.rmp-badge-info {
+  background-color: #e3f2fd;
+  color: #1976d2;
+}
+
+.rmp-badge-success {
+  background-color: #e8f5e9;
+  color: #2e7d32;
+}
+
+/* 过滤栏样式 */
+.rmp-filter-bar {
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  padding: 15px 20px;
+  margin-bottom: 20px;
+}
+
+.rmp-filter-label {
+  font-weight: 600;
+  color: var(--text-color);
+  margin-right: 10px;
+}
+
+.rmp-filter-nav .nav-link {
+  color: var(--text-color);
+  border-radius: 6px;
+  margin-right: 5px;
+  padding: 5px 12px;
+  font-size: 0.9rem;
+}
+
+.rmp-filter-nav .nav-link:hover {
+  background-color: var(--light-gray);
+}
+
+.rmp-filter-nav .nav-link.active {
+  background-color: var(--primary-color);
+  color: white;
+  font-weight: 500;
+}
+
+/* 分页样式 */
+.rmp-pagination .page-link {
+  color: var(--primary-color);
+  border: none;
+  border-radius: 4px;
+  margin: 0 3px;
+}
+
+.rmp-pagination .page-item.active .page-link {
+  background-color: var(--primary-color);
+  color: white;
+}
+
+.rmp-pagination .page-item:first-child .page-link,
+.rmp-pagination .page-item:last-child .page-link {
+  border-radius: 4px;
+}
+
+/* 响应式调整 */
+@media (max-width: 768px) {
+  .rmp-course-card {
+    padding: 15px;
+  }
+  
+  .rmp-metric-item {
+    flex: 1 1 100%;
+  }
+  
+  .rmp-filter-bar {
+    padding: 10px 15px;
+  }
+  
+  .rmp-filter-nav .nav-link {
+    padding: 4px 8px;
+    font-size: 0.85rem;
+  }
+}
+
+/* 评分指标列表样式 */
+.rmp-metrics-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  margin-top: 15px;
+  margin-bottom: 15px;
+}
+
+.rmp-metric-item {
+  flex: 1 0 200px;
+  margin-bottom: 15px;
+}
+
+.rmp-metric-label {
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 10px;
+} 
