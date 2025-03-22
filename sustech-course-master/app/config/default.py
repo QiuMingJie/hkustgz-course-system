@@ -24,14 +24,14 @@ SQLALCHEMY_DATABASE_URI = 'mysql+mysqldb://root:@localhost/hkustgz_course?charse
 SQLALCHEMY_TRACK_MODIFICATIONS = False
 
 # Flask mail
-MAIL_SERVER = 'smtp.gmail.com'  # Gmail的SMTP服务器
-MAIL_PORT = 587  # Gmail的SMTP端口
-MAIL_USE_TLS = True
-MAIL_USE_SSL = False
+MAIL_SERVER = 'smtp.qq.com'  # QQ邮箱SMTP服务器
+MAIL_PORT = 465  # QQ邮箱SMTP端口
+MAIL_USE_TLS = False
+MAIL_USE_SSL = True
 MAIL_DEBUG = DEBUG
-MAIL_USERNAME = 'Aurorra1123@gmail.com'  # Gmail邮箱地址
-MAIL_PASSWORD = 'ttohdbiecgbajtrr'  # Gmail应用专用密码
-MAIL_DEFAULT_SENDER = 'HKUST-GZ Course Evaluation System <Aurorra1123@gmail.com>'  # 发件人名称和邮箱
+MAIL_USERNAME = '1920672371@qq.com'  # QQ邮箱地址
+MAIL_PASSWORD = 'eminbmocymqxbbic'  # QQ邮箱授权码
+MAIL_DEFAULT_SENDER = 'HKUST-GZ Course Evaluation System <1920672371@qq.com>'  # 发件人名称和邮箱
 MAIL_MAX_EMAILS = None
 # MAIL_SUPPRESS_SEND =
 MAIL_ASCII_ATTACHMENTS = False

@@ -129,7 +129,7 @@
                         {% if course.homepage and course.homepage != 'http://' %}
                             <strong>课程主页</strong>：<a href="{{ course.homepage }}">{{ course.homepage }}</a>
                         {% else %}
-                            <strong>课程主页</strong>：暂无（如果你知道，请点右上角“编辑课程信息”添加！）
+                            <strong>课程主页</strong>：暂无（如果你知道，请点右上角"编辑课程信息"添加！）
                         {% endif %}
 
                     </div>
@@ -390,7 +390,7 @@
                                                         {% endif %}
                                                     {% endif %}
             </span>
-                                                <!-- 其他元素，例如“仅登录学生可见”标签等 -->
+                                                <!-- 其他元素，例如"仅登录学生可见"标签等 -->
                                             </div>
                                             <div class="card-body">
                                                 <!-- 评价的其他详细信息，例如课程难度等 -->
@@ -616,11 +616,11 @@
                     </div>
 
 
-                    <!--xxx老师的其他课-->
+                    <!--xxx的其他课-->
                     {% for teacher in course.teachers %}
                         <div class="card my-3 shadow-sm">
                             <div class="card-header">
-                                <h4 class="blue">{{ teacher.name }}老师的其他课</h4>
+                                <h4 class="blue">{{ teacher.name }}的其他课</h4>
                             </div>
                             <ul class="list-group list-group-flush">
                                 {% for rel_course in course.same_teacher_courses(teacher) %}

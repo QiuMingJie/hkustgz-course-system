@@ -189,17 +189,14 @@ def oauth_callback():
         username = fake.name().replace(" ", "_")
         user = User(username=username, email=email, password=str(uuid.uuid4().hex)) # random password
         email_suffix = email.split('@')[-1]
-        email_prefix = email.split('@')[0]
-        # if prefix does not contain "list-"
-        if email_prefix.find("list-") == -1:
-            if email_suffix == 'connect.hkust-gz.edu.cn':
-                user.identity = 'Student'
-            elif email_suffix == 'hkust-gz.edu.cn':
-                user.identity = 'Teacher'
-            ok,message = user.bind_teacher(email)
-            #TODO: deal with bind feedback
+        if email_suffix == 'connect.hkust-gz.edu.cn':
+            user.identity = 'Student'
+        elif email_suffix == 'hkust-gz.edu.cn':
+            user.identity = 'Teacher'
         else:
-            abort(403, "必须使用港科广学生或教师邮箱注册")
+            user.identity = 'Student'  # 默认设置为学生
+        ok,message = user.bind_teacher(email)
+        #TODO: deal with bind feedback
         send_confirm_mail(user.email)
         user.save()
         #login_user(user)
@@ -290,12 +287,13 @@ def signup():
                 password=form['password'].data
             )
             # 根据邮箱后缀判断用户身份
-            if user.email.endswith('@hkust-gz.edu.cn'):
-                user.is_student = True
-            elif user.email.endswith('@ust.hk'):
-                user.is_teacher = True
+            email_suffix = user.email.split('@')[-1]
+            if email_suffix == 'connect.hkust-gz.edu.cn':
+                user.identity = 'Student'
+            elif email_suffix == 'hkust-gz.edu.cn':
+                user.identity = 'Teacher'
             else:
-                user.is_student = True  # 默认设置为学生
+                user.identity = 'Student'  # 默认设置为学生
             db.session.add(user)
             db.session.commit()
             send_confirm_mail(user.email)
@@ -876,9 +874,7 @@ def search():
         return fuzzy_match(teacher_match(q, keywords[1]), keywords[0])
 
     def ordering(query_obj, keywords):
-        # This function is very ugly because sqlalchemy generates anon field names for the literal meta field according to the number of union entries.
-        # So, queries with different number of keywords have different ordering field names.
-        # Expect to refactor this code.
+        # 修改排序逻辑，确保所有SELECT的列都在GROUP BY中
         if len(keywords) == 1:
             ordering_field = 'anon_2_anon_3_anon_4_anon_5_'
         else:
@@ -887,7 +883,25 @@ def search():
             for count in range(5, len(keywords) + 3):
                 ordering_field += 'anon_' + str(count) + '_'
         ordering_field += '_meta'
-        return query_obj.join(CourseRate).order_by(text(ordering_field), Course.QUERY_ORDER())
+        
+        # 添加所有必要的列到GROUP BY子句中
+        return query_obj.join(CourseRate).group_by(
+            Course.id,
+            Course.name,
+            Course.dept_id,
+            Course.course_code,
+            Course.introduction,
+            Course.admin_announcement,
+            Course.homepage,
+            Course.last_edit_time,
+            Course.access_count,
+            Course._image,
+            Course.latest_score,
+            Course.score_type_pf,
+            Course.score_semester,
+            Course.course_material_code,
+            text(ordering_field)
+        ).order_by(text(ordering_field), Course.QUERY_ORDER())
 
     union_keywords = None
     if len(keywords) >= 2:
