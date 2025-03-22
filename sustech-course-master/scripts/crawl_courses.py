@@ -209,7 +209,8 @@ def import_courses(csv_file):
                         teacher = Teacher(name=teacher_name.strip())
                         db.session.add(teacher)
                         db.session.commit()
-                    teachers.append(teacher)
+                    if teacher not in teachers:  # 避免重复添加同一个教师
+                        teachers.append(teacher)
             
             # 检查课程是否已存在
             course = Course.query.filter_by(course_code=row['course_code']).first()
@@ -220,11 +221,17 @@ def import_courses(csv_file):
             # 更新课程基本信息
             course.course_code = row['course_code']
             course.name = row['name']
-            course.teachers = teachers
             course.introduction = row['description']
             course.homepage = row['homepage']
             course.last_edit_time = datetime.now()
             course.course_material_code = row['courseries']
+            
+            # 清除现有的教师关联
+            course.teachers = []
+            db.session.commit()
+            
+            # 添加新的教师关联
+            course.teachers = teachers
             
             if not course.id:
                 db.session.add(course)
@@ -249,21 +256,11 @@ def import_courses(csv_file):
             course_term.campus = row['campus']
             course_term.start_week = int(row['start_week'])
             course_term.end_week = int(row['end_week'])
-            course_term.description = row['description']
-            course_term.description_eng = row['description_eng']
-            course_term.teaching_material = row['teaching_material']
-            course_term.reference_material = row['reference_material']
-            course_term.student_requirements = row['student_requirements']
             
             if not course_term.id:
                 db.session.add(course_term)
             
-            try:
-                db.session.commit()
-                print(f"Successfully imported/updated course: {course.course_code} for term {term}")
-            except Exception as e:
-                db.session.rollback()
-                print(f"Error importing course {course.course_code}: {str(e)}")
+            db.session.commit()
 
 def main():
     """主函数"""
