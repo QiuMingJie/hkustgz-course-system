@@ -1,0 +1,46 @@
+$(document).ready(function() {
+    // 为 .review 类中的所有表格添加 Bootstrap 的表格样式类
+    $('.review table').addClass('table table-sm table-striped');
+    $('.course-overview-table table').addClass('table');
+    $('.review blockquote').addClass('review-blockquote');
+
+    //add img-fluid to all images
+    $('.review img').addClass('img-fluid');
+
+    // 定义一个函数来更新暗色模式
+    function updateDarkMode(isDark) {
+        if (isDark) {
+            $('html').attr('data-bs-theme', 'dark');
+            $('#theme-toggle i').removeClass('bi-moon-fill').addClass('bi-sun-fill');
+            localStorage.setItem('darkMode', 'true');
+        } else {
+            $('html').attr('data-bs-theme', 'light');
+            $('#theme-toggle i').removeClass('bi-sun-fill').addClass('bi-moon-fill');
+            localStorage.setItem('darkMode', 'false');
+        }
+    }
+
+    // 强制使用白天模式
+    localStorage.setItem('darkMode', 'false');
+    let isDarkMode = false;
+    updateDarkMode(isDarkMode);
+
+    // 注释掉添加主题切换按钮的代码
+    // if (!$('#theme-toggle').length) {
+    //     $('body').append('<button id="theme-toggle"><i class="bi bi-moon-fill"></i></button>');
+    // }
+
+    // 注释掉按钮点击事件
+    // $(document).on('click', '#theme-toggle', function() {
+    //     isDarkMode = !isDarkMode;
+    //     updateDarkMode(isDarkMode);
+    // });
+
+    //focus search bar by command + K
+    $(document).on('keydown', function (e) {
+        if (e.metaKey && e.key === 'k') {
+            e.preventDefault();
+            $('#searchInput').focus();
+        }
+    });
+}); 

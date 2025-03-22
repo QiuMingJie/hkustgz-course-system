@@ -225,11 +225,32 @@ class Course(db.Model):
         return self.name + '(' + ','.join(sorted(self.teacher_name_list)) + ')'
 
     @classmethod
-    def create(cls,cno,term,**kwargs):
-        if cls.query.filter_by(cno=cno,term=term).first():
+    def create(cls, cno, term, **kwargs):
+        if cls.query.filter_by(cno=cno, term=term).first():
             return None
-        course = Course(cno=cno,term=term,**kwargs)
+        course = Course(cno=cno, term=term, **kwargs)
         course.course_rate = CourseRate()
+        
+        # 创建默认学期信息
+        current_year = datetime.now().year
+        current_month = datetime.now().month
+        
+        # 根据当前月份确定学期
+        if current_month >= 9:  # 秋季学期
+            term = str(current_year) + '1'
+        elif current_month >= 2:  # 春季学期
+            term = str(current_year-1) + '2'
+        else:  # 上一年秋季学期
+            term = str(current_year-1) + '1'
+            
+        course_term = CourseTerm(
+            course=course,
+            term=term,
+            credit=3.0,  # 默认学分
+            hours=48,    # 默认学时
+            hours_per_week=3  # 默认周学时
+        )
+        db.session.add(course_term)
         db.session.add(course)
         db.session.commit()
         return course
@@ -579,7 +600,8 @@ class Course(db.Model):
 
     @property
     def term_ids(self):
-        return [ t.term for t in self.terms ]
+        terms = [t.term for t in self.terms if t.term]  # 过滤掉空值
+        return sorted(terms, reverse=True) if terms else []  # 确保返回有序列表
 
     # sqlalchemy uses __getattr__, so we cannot use it
     # copy properties from latest_term

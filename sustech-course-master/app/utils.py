@@ -261,19 +261,37 @@ def updatetime_minute(date):
 
 @app.template_filter('term_display')
 def term_display(term):
+    if not term:
+        current_year = datetime.now().year
+        current_month = datetime.now().month
+        if current_month >= 9:  # 秋季学期
+            return str(current_year) + '秋'
+        elif current_month >= 2:  # 春季学期
+            return str(current_year) + '春'
+        else:  # 上一年秋季学期
+            return str(current_year-1) + '秋'
+            
     if isinstance(term, list):
-        return ' '.join([ term_display(t) for t in term ])
+        if not term:  # 如果列表为空
+            return term_display(None)  # 使用默认学期
+        terms = [term_display(t) for t in term if t]  # 过滤掉空值
+        return ' '.join(terms) if terms else term_display(None)
+        
     try:
-        if term[4] == '1':
-            return term[0:4] + '秋'
-        elif term[4] == '2':
-            return str(int(term[0:4])+1) + '春'
-        elif term[4] == '3':
-            return str(int(term[0:4])+1) + '夏'
+        if not isinstance(term, str) or len(term) != 5:  # 确保term是5位字符串
+            return term_display(None)  # 使用默认学期
+        year = term[0:4]
+        semester = term[4]
+        if semester == '1':
+            return year + '秋'
+        elif semester == '2':
+            return str(int(year)+1) + '春'
+        elif semester == '3':
+            return str(int(year)+1) + '夏'
         else:
-            return '未知'
+            return term_display(None)  # 使用默认学期
     except:
-        return '未知'
+        return term_display(None)  # 使用默认学期
 
 @app.template_filter('term_display_short')
 def term_display_short(term, NUM_DISPLAY_TERMS=2):
