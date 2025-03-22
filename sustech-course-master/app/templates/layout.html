@@ -5,7 +5,7 @@
     <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
       <div class="container">
         <a class="navbar-brand fw-bold desktop" href="{{ url_for('home.index') }}">
-          <img src="{{ url_for('static', filename='image/footer_logo_colorful.png') }}" alt="HKUST-GZ logo" style="height: 35px; margin-right: 12px;"> HKUST-GZ Course Evaluation
+          <img src="{{ url_for('static', filename='image/footer_logo_colorful.png') }}" alt="HKUST-GZ logo" style="height: 35px; margin-right: 12px;"> Course Evaluation
         </a>
         <a class="navbar-brand fw-bold mobile" href="{{ url_for('home.index') }}">
           <img src="{{ url_for('static', filename='image/footer_logo_colorful.png') }}" alt="HKUST-GZ logo" style="height: 30px; margin-right: 8px;"> HKUST-GZ
@@ -17,28 +17,26 @@
         <div id="navbar" class="collapse navbar-collapse">
           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
             <li class="nav-item">
-              <a class="nav-link px-3 {% if this_module and (this_module=='home.latest_reviews' or this_module=='home.search_reviews') %}active fw-bold{% endif %}" href="{{ url_for('home.latest_reviews') }}">点评</a>
+              <a class="nav-link {% if this_module and (this_module=='home.latest_reviews' or this_module=='home.search_reviews') %}active fw-bold{% endif %}" href="{{ url_for('home.latest_reviews') }}">点评</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link px-3 {% if this_module and (this_module=='course.index' or this_module=='home.search') %}active fw-bold{% endif %}" href="{{ url_for('course.index') }}">课程</a>
+              <a class="nav-link {% if this_module and (this_module=='course.index' or this_module=='home.search') %}active fw-bold{% endif %}" href="{{ url_for('course.index') }}">课程</a>
             </li>
             {% if current_user.is_authenticated %}
             <li class="nav-item">
-              <a class="nav-link px-3 {% if this_module and this_module=='home.follow_reviews' %}active fw-bold{% endif %}" href="{{ url_for('home.follow_reviews') }}">关注</a>
+              <a class="nav-link {% if this_module and this_module=='home.follow_reviews' %}active fw-bold{% endif %}" href="{{ url_for('home.follow_reviews') }}">关注</a>
             </li>
             {% endif %}
             <li class="nav-item">
-              <a class="nav-link px-3" href="https://ug-prog-crs.hkust-gz.edu.cn/#/introduce/detail?id=Artificial%20Intelligence" target="_blank">培养方案</a>
+              <a class="nav-link" href="https://ug-prog-crs.hkust-gz.edu.cn/#/introduce/detail?id=Artificial%20Intelligence" target="_blank">培养方案</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link px-3 {% if this_module and this_module=='ai.chat' %}active fw-bold{% endif %}" href="{{ url_for('ai.chat') }}">
-                AI助手
-              </a>
+              <a class="nav-link {% if this_module and this_module=='ai.chat' %}active fw-bold{% endif %}" href="{{ url_for('ai.chat') }}">AI助手</a>
             </li>
           </ul>
 
-          <form class="d-flex mx-3" style="max-width: 450px;" action="{{ url_for('home.search_reviews_meilisearch_api_html') if this_module == 'home.search_reviews' else url_for('home.search') }}" method="get" role="search">
-            <div class="input-group w-100">
+          <form class="d-flex mx-2" style="min-width: 200px; max-width: 300px;" action="{{ url_for('home.search_reviews_meilisearch_api_html') if this_module == 'home.search_reviews' else url_for('home.search') }}" method="get" role="search">
+            <div class="input-group">
               <input type="text" name="q" class="form-control border-end-0" placeholder="搜索课程、老师、点评" aria-label="Search" value="{{ keyword or '' }}">
               <button type="submit" class="btn btn-primary border-start-0" id="search-button">
                 <i class="fa fa-search"></i>
@@ -47,31 +45,32 @@
           </form>
 
           {% if current_user.is_authenticated %}
-          <div id="dropdown-notice" class="dropdown mx-2">
-            <a class="nav-link dropdown-toggle mt-2 mt-lg-0" href="#" id="notificationDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-              {% if current_user.unread_notification_count > 0 %}
-              <span class="badge bg-danger rounded-pill">{{ current_user.unread_notification_count }}</span>
-              {% endif %}
-            </a>
-            <ul class="dropdown-menu dropdown-menu-end shadow-sm border-0" aria-labelledby="notificationDropdownMenuLink">
-              {% if current_user.latest_notifications_text|length == 0 %}
-              {% set notification_text_list = ["还没有消息哦！"] %}
-              {% else %}
-              {% set notification_text_list = current_user.latest_notifications_text %}
-              {% endif %}
-              {% for notification_text in notification_text_list %}
-              <li class="ud-pd-sm dashed">
-                <div class="notice">{{ notification_text|safe }}</div>
-              </li>
-              {% endfor %}
-              <li class="ud-pd-sm float-end"><a class="text-primary" href="{{ url_for('user.notice')}}">查看全部 <i class="fa-solid fa-ellipsis"></i></a></li>
-            </ul>
-          </div>
+          <div class="d-flex align-items-center">
+            <div id="dropdown-notice" class="dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="notificationDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                {% if current_user.unread_notification_count > 0 %}
+                <span class="badge bg-danger rounded-pill">{{ current_user.unread_notification_count }}</span>
+                {% endif %}
+              </a>
+              <ul class="dropdown-menu dropdown-menu-end shadow-sm border-0" aria-labelledby="notificationDropdownMenuLink">
+                {% if current_user.latest_notifications_text|length == 0 %}
+                {% set notification_text_list = ["还没有消息哦！"] %}
+                {% else %}
+                {% set notification_text_list = current_user.latest_notifications_text %}
+                {% endif %}
+                {% for notification_text in notification_text_list %}
+                <li class="ud-pd-sm dashed">
+                  <div class="notice">{{ notification_text|safe }}</div>
+                </li>
+                {% endfor %}
+                <li class="ud-pd-sm float-end"><a class="text-primary" href="{{ url_for('user.notice')}}">查看全部 <i class="fa-solid fa-ellipsis"></i></a></li>
+              </ul>
+            </div>
 
-          <ul class="navbar-nav">
-            <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle mt-2 mt-lg-0" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                <i class="fa-solid fa-user-circle"></i> {{ current_user.username }}
+            <div class="nav-item dropdown ms-2">
+              <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <i class="fa-solid fa-user-circle me-1"></i>
+                <span class="username">{{ current_user.username }}</span>
               </a>
               <ul class="dropdown-menu dropdown-menu-end shadow-sm border-0" aria-labelledby="navbarDropdownMenuLink">
                 <li><a class="dropdown-item" href="{{ url_for('user.view_profile', user_id=current_user.id) }}"><i class="fa-solid fa-house"></i> 个人主页</a></li>
@@ -79,10 +78,10 @@
                 <li><hr class="dropdown-divider"></li>
                 <li><a class="dropdown-item" href="{{ url_for('home.logout') }}"><i class="fa-solid fa-right-from-bracket"></i> 退出</a></li>
               </ul>
-            </li>
-          </ul>
+            </div>
+          </div>
           {% else %}
-          <button type="button" class="btn btn-primary mt-2 mt-lg-0 px-4" data-bs-toggle="modal" data-bs-target="#signin">
+          <button type="button" class="btn btn-primary ms-2" data-bs-toggle="modal" data-bs-target="#signin">
             <i class="fa-solid fa-right-to-bracket"></i> 登录
           </button>
           {% endif %}
@@ -121,9 +120,9 @@
               <button type="submit" class="btn btn-primary btn-lg">
                 <i class="fa-solid fa-right-to-bracket"></i> 登录
               </button>
-              <a class="btn btn-outline-secondary" href="{{ url_for('home.oauth') }}">
+              <!-- <a class="btn btn-outline-secondary" href="{{ url_for('home.oauth') }}">
                 <i class="fa-solid fa-key"></i> CRA SSO / SUSTech CAS 登录
-              </a>
+              </a> -->
             </div>
             <div class="text-center mt-3">
               <span class="text-muted">还没有账号？</span>
