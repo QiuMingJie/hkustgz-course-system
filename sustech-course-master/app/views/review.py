@@ -65,15 +65,56 @@ def new_review(course_id):
 
     message = ''
     form = ReviewForm(formdata=request.form, obj=review)
+    polls = [
+        {'name': 'difficulty', 'display': '课程难度', 'options': ['简单', '中等', '困难']},
+        {'name': 'homework', 'display': '作业多少', 'options': ['不多', '中等', '超多']},
+        {'name': 'grading', 'display': '给分好坏', 'options': ['超好', '一般', '杀手']},
+        {'name': 'gain', 'display': '收获多少', 'options': ['很多', '一般', '没有']},
+    ]
+
     if request.method == 'POST':
-        if form.validate_on_submit():
+        print("接收到的表单数据:", request.form)  # 调试信息
+        
+        # 手动转换数值类型字段
+        try:
+            if request.form.get('difficulty'):
+                form.difficulty.data = int(request.form.get('difficulty'))
+            if request.form.get('homework'):
+                form.homework.data = int(request.form.get('homework'))
+            if request.form.get('grading'):
+                form.grading.data = int(request.form.get('grading'))
+            if request.form.get('gain'):
+                form.gain.data = int(request.form.get('gain'))
+            if request.form.get('rate'):
+                form.rate.data = int(request.form.get('rate'))
+            if request.form.get('term'):
+                form.term.data = request.form.get('term')
+        except ValueError as e:
+            print("数值转换错误:", str(e))  # 调试信息
+            if request.form.get('is_ajax'):
+                return jsonify({
+                    'ok': False,
+                    'message': '数值字段格式错误'
+                })
+            message = '提交失败，请确保所有评分项填写正确！'
+            return render_template('new-review.html', form=form, course=course, review=review, polls=polls, message=message, is_new=is_new, title='写点评')
+        
+        if not form.validate():
+            print("表单验证错误:", form.errors)  # 调试信息
+            if request.form.get('is_ajax'):
+                return jsonify({
+                    'ok': False,
+                    'message': '表单验证失败：' + '; '.join([f"{field}: {', '.join(errors)}" for field, errors in form.errors.items()])
+                })
+            message = '提交失败，请检查所有必填项！'
+            return render_template('new-review.html', form=form, course=course, review=review, polls=polls, message=message, is_new=is_new, title='写点评')
+            
+        try:
             # check validity of term
             if str(form.term.data) not in course.term_ids:
-                abort(404)
+                raise ValueError('无效的学期选择')
 
             form.populate_obj(review)
-            # if form.is_mobile.data:
-            #     review.content = markdown.markdown(review.content)
             review.content, mentioned_users = editor_parse_at(review.content)
             review.content = sanitize(review.content)
 
@@ -93,10 +134,8 @@ def new_review(course_id):
                 for user in mentioned_users:
                     user.notify('mention', review)
                 record_review_history(review, 'create')
-            else: # update existing review
+            else:
                 if old_review.content == review.content and old_review.difficulty == review.difficulty and old_review.homework == review.homework and old_review.grading == review.grading and old_review.gain == review.gain and old_review.rate == review.rate:
-                    # if content and rating are not changed, do not update the update_time
-                    # especially, if only privacy settings are changed, do not display on recent reviews or notify followers
                     pass
                 else:
                     review.update_time = datetime.utcnow()
@@ -109,23 +148,20 @@ def new_review(course_id):
                 record_review_history(review, 'update')
 
             next_url = url_for('course.view_course', course_id=course_id, _external=True) + '#review-' + str(review.id)
-            if form.is_ajax.data:
-                return jsonify({'ok': True, 'next_url': next_url })
-            else:
-                return redirect(next_url)
-        else: # invalid submission, try again
-            message = '提交失败，请编辑后重新提交！'
+            if request.form.get('is_ajax'):
+                return jsonify({'ok': True, 'next_url': next_url})
+            return redirect(next_url)
+            
+        except Exception as e:
+            print("处理评论时出错:", str(e))  # 调试信息
+            if request.form.get('is_ajax'):
+                return jsonify({'ok': False, 'message': str(e)})
+            message = f'提交失败：{str(e)}'
+            return render_template('new-review.html', form=form, course=course, review=review, polls=polls, message=message, is_new=is_new, title='写点评')
 
-    polls = [
-        {'name': 'difficulty', 'display': '课程难度', 'options': ['简单', '中等', '困难'] },
-        {'name': 'homework', 'display': '作业多少', 'options': ['不多', '中等', '超多'] },
-        {'name': 'grading', 'display': '给分好坏', 'options': ['超好', '一般', '杀手'] },
-        {'name': 'gain', 'display': '收获多少', 'options': ['很多', '一般', '没有'] },
-    ]
-    if form.is_ajax.data:
-        return jsonify({'ok': False})
-    else:
-        return render_template('new-review.html', form=form, course=course, review=review, polls=polls, message=message, is_new=is_new, title='写点评')
+    if request.form.get('is_ajax'):
+        return jsonify({'ok': False, 'message': '无效的请求'})
+    return render_template('new-review.html', form=form, course=course, review=review, polls=polls, message=message, is_new=is_new, title='写点评')
 
 
 @review.route('/delete/',methods=['POST'])
