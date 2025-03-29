@@ -1,3 +1,4 @@
+<script>
 $(document).ready(function() {
     // 为 .review 类中的所有表格添加 Bootstrap 的表格样式类
     $('.review table').addClass('table table-sm table-striped');
@@ -6,44 +7,6 @@ $(document).ready(function() {
 
     //add img-fluid to all images
     $('.review img').addClass('img-fluid');
-
-    // 添加平滑滚动效果
-    $('a[href*="#"]').not('[href="#"]').click(function(event) {
-        if (
-            location.pathname.replace(/^\//, '') == this.pathname.replace(/^\//, '') 
-            && 
-            location.hostname == this.hostname
-        ) {
-            var target = $(this.hash);
-            target = target.length ? target : $('[name=' + this.hash.slice(1) + ']');
-            if (target.length) {
-                event.preventDefault();
-                $('html, body').animate({
-                    scrollTop: target.offset().top - 70
-                }, 1000);
-            }
-        }
-    });
-
-    // 添加卡片悬停效果
-    $('.card').hover(
-        function() {
-            $(this).addClass('shadow-lg');
-        },
-        function() {
-            $(this).removeClass('shadow-lg');
-        }
-    );
-
-    // 添加表单验证动画
-    $('form').on('submit', function() {
-        $(this).addClass('was-validated');
-    });
-
-    // 添加加载动画
-    $(window).on('load', function() {
-        $('.loading-overlay').fadeOut();
-    });
 
     // 定义一个函数来更新暗色模式
     function updateDarkMode(isDark) {
@@ -63,16 +26,16 @@ $(document).ready(function() {
     let isDarkMode = false;
     updateDarkMode(isDarkMode);
 
-    // 注释掉添加主题切换按钮的代码
-    // if (!$('#theme-toggle').length) {
-    //     $('body').append('<button id="theme-toggle"><i class="bi bi-moon-fill"></i></button>');
-    // }
+    // 添加主题切换按钮到body，并设置初始图标
+    if (!$('#theme-toggle').length) {
+        $('body').append('<button id="theme-toggle"><i class="bi bi-moon-fill"></i></button>');
+    }
 
-    // 注释掉按钮点击事件
-    // $(document).on('click', '#theme-toggle', function() {
-    //     isDarkMode = !isDarkMode;
-    //     updateDarkMode(isDarkMode);
-    // });
+    // 设置按钮点击事件
+    $(document).on('click', '#theme-toggle', function() {
+        isDarkMode = !isDarkMode;
+        updateDarkMode(isDarkMode);
+    });
 
     //focus search bar by command + K
     $(document).on('keydown', function (e) {
@@ -81,11 +44,63 @@ $(document).ready(function() {
             $('#searchInput').focus();
         }
     });
+});
+ $.ajaxSetup({
+     beforeSend: function(xhr, settings) {
+         if (!/^(GET|HEAD|OPTIONS|TRACE)$/i.test(settings.type) && !this.crossDomain) {
+             xhr.setRequestHeader("X-CSRFToken", "{{ csrf_token() }}")
+         }
+     }
+ });
 
-    // 添加搜索框动画效果
-    $('#searchInput').on('focus', function() {
-        $(this).parent().addClass('shadow-sm');
-    }).on('blur', function() {
-        $(this).parent().removeClass('shadow-sm');
-    });
-}); 
+function toHourMinutes(date) {
+  let hours = date.getHours().toString().padStart(2, '0');
+  let minutes = date.getMinutes().toString().padStart(2, '0');
+  return `${hours}:${minutes}`;
+}
+
+function toYearMonthDate(date) {
+  let year = date.getFullYear();
+  let month = (date.getMonth() + 1).toString().padStart(2, '0');
+  let day = date.getDate().toString().padStart(2, '0');
+  return `${year}年${month}月${day}日`;
+}
+
+function updateLocalTime() {
+  const now = new Date();
+  const yesterday = new Date();
+  yesterday.setDate(now.getDate() - 1);
+
+  $('.localtime').each(function() {
+    const utcTime = $(this).text();
+    const pubTime = new Date(utcTime + ' UTC');
+
+    if (isNaN(pubTime.getTime())) {
+      return;
+    }
+
+    if (pubTime.toDateString() === now.toDateString()) {
+      $(this).text('今天 ' + toHourMinutes(pubTime));
+    } else if (pubTime.toDateString() === yesterday.toDateString()) {
+      $(this).text('昨天 ' + toHourMinutes(pubTime));
+    } else {
+      $(this).text(toYearMonthDate(pubTime) + ' ' + toHourMinutes(pubTime));
+    }
+    $(this).show();
+  });
+}
+
+updateLocalTime();
+
+
+
+// Initialize ClipboardJS
+new ClipboardJS('.review-links');
+
+// Initialize Bootstrap 5 tooltips
+var tooltipTriggerList = [].slice.call(document.querySelectorAll('.review-links'));
+tooltipTriggerList.forEach(function (tooltipTriggerEl) {
+  new bootstrap.Tooltip(tooltipTriggerEl)
+});
+
+</script>

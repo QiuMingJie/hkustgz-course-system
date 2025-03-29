@@ -1,0 +1,39 @@
+{% include 'common-header.html' %}
+
+<body>
+  <div id="wrap">
+  <nav class="navbar navbar-expand-lg shadow">
+    <div class="container">
+      <!-- Brand and toggle get grouped for better mobile display -->
+      <div class="navbar-header">
+        <a class="navbar-brand fw-bold desktop" href={{ url_for('home.index') }}>
+          <img src="{{ url_for('static', filename='image/footer_logo_colorful.png') }}" alt="HKUST-GZ logo" style="height: 35px; margin-right: 12px;"> HKUST-GZ Curriculum Evaluation System
+        </a>
+        <a class="navbar-brand fw-bold mobile" href={{ url_for('home.index') }}>
+          <img src="{{ url_for('static', filename='image/footer_logo_colorful.png') }}" alt="HKUST-GZ logo" style="height: 30px; margin-right: 8px;"> NCES
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  {% block content %} {% endblock %}
+
+  <div id="push"></div>
+  </div><!-- ./wrap -->
+  {% include 'common-footer.html' %}
+</body>
+
+
+
+
+  <!-- Bootstrap core JavaScript
+  ================================================== -->
+  <!-- Placed at the end of the document so the pages load faster -->
+  <script src="https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+  <script src="https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script><!-- 在您的HTML头部添加 -->
+<link href="https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet">
+
+  {% include 'common-scripts.html' %}
+  {% block script %} {% endblock %}
+</body>
+</html>
